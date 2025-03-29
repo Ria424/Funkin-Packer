@@ -1,6 +1,6 @@
 function createHTTPQuery(params: Record<string, any> | string | null): string {
-	if(typeof params === 'string') return params;
-	if(!params) return '';
+	if (typeof params === 'string') return params;
+	if (!params) return '';
 
 	const query = [];
 	for (let key of Object.keys(params)) {
@@ -14,7 +14,7 @@ type ErrorCallback = (error: string) => void;
 type Method = "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH";
 type DataType = "text" | "arraybuffer" | "xml";
 
-function createXMLHTTPRequest(url: string | URL, callback:SuccessCallback, errorCallback?:ErrorCallback, dataType:DataType="text") {
+function createXMLHTTPRequest(url: string | URL, callback: SuccessCallback, errorCallback?: ErrorCallback, dataType: DataType = "text") {
 	let xmlhttp = (globalThis.XMLHttpRequest && new XMLHttpRequest()) || null;
 
 	if (!xmlhttp) return xmlhttp;
@@ -33,9 +33,9 @@ function createXMLHTTPRequest(url: string | URL, callback:SuccessCallback, error
 					data = xmlhttp.responseText;
 				}
 
-				if(callback) callback(data);
+				if (callback) callback(data);
 			}
-			else if(errorCallback) {
+			else if (errorCallback) {
 				errorCallback(`${url} HTTP Error ${xmlhttp.status}: ${xmlhttp.statusText}`);
 			}
 		}
@@ -44,12 +44,12 @@ function createXMLHTTPRequest(url: string | URL, callback:SuccessCallback, error
 	return xmlhttp;
 }
 
-function send(url: string | URL, method:Method, params:string | null="", callback:SuccessCallback, errorCallback?:ErrorCallback, dataType:DataType="text") {
+function send(url: string | URL, method: Method, params: string | null = "", callback: SuccessCallback, errorCallback?: ErrorCallback, dataType: DataType = "text") {
 	let xmlhttp = createXMLHTTPRequest(url, callback, errorCallback, dataType);
 	if (xmlhttp) {
 		let query = createHTTPQuery(params);
 
-		if(method === "GET" && query) url += "?" + query;
+		if (method === "GET" && query) url += "?" + query;
 
 		xmlhttp.open(method, url, true);
 
@@ -64,13 +64,13 @@ function send(url: string | URL, method:Method, params:string | null="", callbac
 	}
 }
 
-function sendGet(url: string, params:string | null="", callback:SuccessCallback, errorCallback?:ErrorCallback, dataType:DataType="text") {
+function sendGet(url: string, params: string | null = "", callback: SuccessCallback, errorCallback?: ErrorCallback, dataType: DataType = "text") {
 	return send(url, "GET", params, callback, errorCallback, dataType);
 }
 
-function sendPost(url: string, params:string | null="", callback:SuccessCallback, errorCallback?:ErrorCallback, dataType:DataType="text") {
+function sendPost(url: string, params: string | null = "", callback: SuccessCallback, errorCallback?: ErrorCallback, dataType: DataType = "text") {
 	return send(url, "POST", params, callback, errorCallback, dataType);
 }
 
-export {sendGet, sendPost};
+export { sendGet, sendPost };
 export default send;

@@ -15,7 +15,7 @@ import SheetSplitter from './SheetSplitter';
 import { Observer, GLOBAL_EVENT } from '../Observer';
 import TypedObserver from 'TypedObserver';
 
-interface Props {}
+interface Props { }
 
 interface State {
 	messageBox: React.ReactNode;
@@ -28,7 +28,7 @@ interface State {
 }
 
 class MainLayout extends React.Component<Props, State> {
-	constructor(props:Props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -79,22 +79,22 @@ class MainLayout extends React.Component<Props, State> {
 	} */
 
 	showMessage = (content: string, buttons?: ButtonData[]) => {
-		if(this.state.messageBox) return;
+		if (this.state.messageBox) return;
 
 		let box = (<MessageBox content={content} buttons={buttons} closeCallback={this.closeMessage} />);
-		this.setState({messageBox: box});
+		this.setState({ messageBox: box });
 	}
 
 	closeMessage = () => {
-		this.setState({messageBox: null});
+		this.setState({ messageBox: null });
 	}
 
 	showProcessing = () => {
-		this.setState({processing: true});
+		this.setState({ processing: true });
 	}
 
 	hideProcessing = () => {
-		this.setState({processing: false});
+		this.setState({ processing: false });
 	}
 
 	/*showAbout() {
@@ -106,36 +106,36 @@ class MainLayout extends React.Component<Props, State> {
 	}*/
 
 	showEditCustomExporter = () => {
-		this.setState({editCustomExporter: true});
+		this.setState({ editCustomExporter: true });
 	}
 
 	hideEditCustomExporter = () => {
-		this.setState({editCustomExporter: false});
+		this.setState({ editCustomExporter: false });
 	}
 
 	showSheetSplitter = () => {
-		this.setState({sheetSplitter: true});
+		this.setState({ sheetSplitter: true });
 	}
 
 	hideSheetSplitter = () => {
-		this.setState({sheetSplitter: false});
+		this.setState({ sheetSplitter: false });
 	}
 
 	override render() {
 		return (
 			<div className="main-wrapper">
-				<MainHeader/>
+				<MainHeader />
 
 				<div className="main-layout border-color-gray">
-					<ImagesList/>
-					<PackProperties/>
-					<PackResults/>
-					{this.state.browserBlocker ? (<OldBrowserBlocker/>) : null}
+					<ImagesList />
+					<PackProperties />
+					<PackResults />
+					{this.state.browserBlocker ? (<OldBrowserBlocker />) : null}
 					{/*this.state.about ? (<About/>) : null*/}
-					{this.state.editCustomExporter ? (<EditCustomExporter/>) : null}
-					{this.state.sheetSplitter ? (<SheetSplitter/>) : null}
+					{this.state.editCustomExporter ? (<EditCustomExporter />) : null}
+					{this.state.sheetSplitter ? (<SheetSplitter />) : null}
 					{/* this.state.updater ? (<Updater data={this.state.updater}/>) : null */}
-					{this.state.processing ? (<ProcessingOverlay/>) : null}
+					{this.state.processing ? (<ProcessingOverlay />) : null}
 					{this.state.messageBox}
 				</div>
 			</div>

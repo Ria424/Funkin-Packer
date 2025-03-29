@@ -6,7 +6,7 @@ import I18 from '../locale/I18';
 import * as appInfo from '../../../package.json';
 
 class About extends React.Component {
-	constructor(props:any) {
+	constructor(props: any) {
 		super(props);
 	}
 

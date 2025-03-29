@@ -7,7 +7,7 @@ import I18 from 'client/locale/I18';
 
 class Downloader {
 
-	static run(files:FileData[], fileName:string, savePath?:string) {
+	static run(files: FileData[], fileName: string, savePath?: string) {
 
 		let dir = savePath;
 
@@ -25,11 +25,11 @@ class Downloader {
 			return Promise.resolve(dir);
 		};
 
-		const checkExists = (files:FileData[], dir:string) => {
+		const checkExists = (files: FileData[], dir: string) => {
 			return files.some(file => fs.existsSync(path.normalize(dir + "/" + file.name)));
 		};
 
-		const complete = (files:FileData[], dir:string) => {
+		const complete = (files: FileData[], dir: string) => {
 			for (let file of files) {
 				let content = file.content;
 				if (file.base64) content = Buffer.from(content, 'base64').toString('utf8');

@@ -1,12 +1,12 @@
 type Callback<T> = (...args: T[]) => void;
 
 class TypedObserver<T, FUNC extends Function = Callback<T>> {
-	private _callbacks: Array<{callback: FUNC, context?: ThisType<FUNC>}> = [];
+	private _callbacks: Array<{ callback: FUNC, context?: ThisType<FUNC> }> = [];
 
-	constructor() {}
+	constructor() { }
 
 	on(callback: FUNC, context?: ThisType<FUNC>) {
-		this._callbacks.push({callback, context});
+		this._callbacks.push({ callback, context });
 	}
 
 	off(callback: FUNC, context?: ThisType<FUNC>) {

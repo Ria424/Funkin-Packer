@@ -47,7 +47,7 @@ class EditCustomExporter extends React.Component {
 
 			Observer.emit(GLOBAL_EVENT.HIDE_EDIT_CUSTOM_EXPORTER);
 		}
-		catch(e: any) {
+		catch (e: any) {
 			TypedObserver.showMessage.emit(I18.f("EXPORTER_ERROR", e.message));
 			console.error(e);
 		}
@@ -70,13 +70,13 @@ class EditCustomExporter extends React.Component {
 
 					<div>
 						<b>{I18.f("ALLOW_TRIM")}</b>
-						<input ref={this.allowTrimRef} className="border-color-gray" type="checkbox" defaultChecked={exporter.allowTrim}/>
+						<input ref={this.allowTrimRef} className="border-color-gray" type="checkbox" defaultChecked={exporter.allowTrim} />
 
 						<b>{I18.f("ALLOW_ROTATION")}</b>
-						<input ref={this.allowRotationRef} className="border-color-gray" type="checkbox" defaultChecked={exporter.allowRotation}/>
+						<input ref={this.allowRotationRef} className="border-color-gray" type="checkbox" defaultChecked={exporter.allowRotation} />
 
 						<b>{I18.f("FILE_EXT")}</b>
-						<input ref={this.fileExtRef} className="border-color-gray" type="text" defaultValue={exporter.fileExt}/>
+						<input ref={this.fileExtRef} className="border-color-gray" type="text" defaultValue={exporter.fileExt} />
 					</div>
 
 					<div className="edit-custom-exporter-controls">

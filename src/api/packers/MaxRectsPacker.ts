@@ -44,7 +44,7 @@ class MaxRectsPacker extends Packer {
 
 		const packer = new MaxRectsPackerEngine<Rectangle>(this.binWidth, this.binHeight, this.padding, options);
 
-		const input:Rectangle[] = [];
+		const input: Rectangle[] = [];
 
 		for (const item of data) {
 			input.push({ x: 0, y: 0, width: item.frame.w, height: item.frame.h, data: item, rot: false });
@@ -53,7 +53,7 @@ class MaxRectsPacker extends Packer {
 		packer.addArray(input);
 
 		const bin = packer.bins[0];
-		if(!bin) {
+		if (!bin) {
 			return [];
 		}
 		const rects = bin.rects;
@@ -61,7 +61,7 @@ class MaxRectsPacker extends Packer {
 		const res = [];
 
 		for (const item of rects) {
-			if(!item) {
+			if (!item) {
 				continue;
 			}
 			item.data.frame.x = item.x;
@@ -77,11 +77,11 @@ class MaxRectsPacker extends Packer {
 		return "MaxRectsPacker";
 	}
 
-	static override get defaultMethod():MethodType {
+	static override get defaultMethod(): MethodType {
 		return METHODS.Smart;
 	}
 
-	static override get methods():MethodList {
+	static override get methods(): MethodList {
 		return METHODS;
 	}
 
@@ -89,7 +89,7 @@ class MaxRectsPacker extends Packer {
 		return true;
 	}
 
-	static override getMethodProps(id:MethodType) {
+	static override getMethodProps(id: MethodType) {
 		switch (id) {
 			case METHODS.Smart:
 				return { name: "Smart edge logic", description: "" };

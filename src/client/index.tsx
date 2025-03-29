@@ -7,12 +7,12 @@ import MainLayout from './ui/MainLayout';
 
 import Storage from './utils/Storage';
 
-import {getLanguageByCode, languages, type Language} from './locale/languages';
+import { getLanguageByCode, languages, type Language } from './locale/languages';
 
 import Controller from 'platform/Controller';
 import TypedObserver from 'TypedObserver';
 
-let app:APP;
+let app: APP;
 let layoutRef: React.RefObject<MainLayout> = React.createRef();
 
 const STORAGE_LANGUAGE_KEY = "language";
@@ -36,7 +36,7 @@ function run() {
 	});
 
 	Controller.init();
-	if(PLATFORM === "electron") {
+	if (PLATFORM === "electron") {
 		injectCss("static/css/index-electron.css");
 	}
 	loadLocalization();
@@ -44,7 +44,7 @@ function run() {
 
 function loadLocalization() {
 	I18.supportedLanguages = [];
-	for(let i = 0; i < languages.length; i++) {
+	for (let i = 0; i < languages.length; i++) {
 		I18.supportedLanguages.push(languages[i].lang);
 	}
 	I18.currentLanguage = getLanguageByCode(Storage.load(STORAGE_LANGUAGE_KEY, false));
@@ -75,7 +75,7 @@ function injectCss(path: string) {
 }
 
 function setLocale(locale: Language) {
-	if(!layoutRef || !layoutRef.current) return;
+	if (!layoutRef || !layoutRef.current) return;
 
 	I18.currentLanguage = locale;
 	//I18.init(locale);

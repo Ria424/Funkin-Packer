@@ -42,12 +42,12 @@ type JsonSlice = {
 }
 
 type JsonHashFrame = {
-    frame: { x: number, y: number, w: number, h: number },
-    rotated?: boolean,
-    trimmed?: boolean,
-    spriteSourceSize: { x: number, y: number, w: number, h: number },
-    sourceSize: { w: number, h: number },
-    duration?: number
+	frame: { x: number, y: number, w: number, h: number },
+	rotated?: boolean,
+	trimmed?: boolean,
+	spriteSourceSize: { x: number, y: number, w: number, h: number },
+	sourceSize: { w: number, h: number },
+	duration?: number
 }
 
 class JsonHash extends Splitter {
@@ -56,8 +56,8 @@ class JsonHash extends Splitter {
 			const json = JSON.parse(data);
 			cb(json && json.frames && !Array.isArray(json.frames));
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}
@@ -71,7 +71,7 @@ class JsonHash extends Splitter {
 
 			const names = Object.keys(json.frames);
 
-			for(const name of names) {
+			for (const name of names) {
 				const item = json.frames[name];
 
 				const trimmed = item.trimmed || item.frame.w < item.spriteSourceSize.w || item.frame.h < item.spriteSourceSize.h;
@@ -107,8 +107,8 @@ class JsonHash extends Splitter {
 
 			cb(res);
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}

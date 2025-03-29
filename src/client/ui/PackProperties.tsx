@@ -21,9 +21,9 @@ import APP from 'client/APP';
 const STORAGE_OPTIONS_KEY = "pack-options";
 const STORAGE_CUSTOM_EXPORTER_KEY = "custom-exporter";
 
-let INSTANCE:PackProperties = null;
+let INSTANCE: PackProperties = null;
 
-interface Props {}
+interface Props { }
 
 interface State {
 	packer: string;
@@ -95,7 +95,7 @@ class PackProperties extends React.Component<Props, State> {
 	loadCustomExporter = () => {
 		// WARNING: todo: type this
 		let data = Storage.load(STORAGE_CUSTOM_EXPORTER_KEY);
-		if(data) {
+		if (data) {
 			let exporter = getExporterByType("custom");
 			exporter.allowTrim = data.allowTrim;
 			exporter.allowRotation = data.allowRotation;
@@ -109,7 +109,7 @@ class PackProperties extends React.Component<Props, State> {
 	}
 
 	applyOptionsDefaults = (data: PackOptions) => {
-		if(!data) data = {};
+		if (!data) data = {};
 
 		data.fileName = data.fileName || "texture";
 		data.textureFormat = data.textureFormat || "png";
@@ -140,18 +140,18 @@ class PackProperties extends React.Component<Props, State> {
 
 		let methodValid = false;
 		let packer = getPackerByType(data.packer);
-		if(packer) {
+		if (packer) {
 			let packerMethods = Object.keys(packer.methods);
-			for(let method of packerMethods) {
-				if(method === data.packerMethod) {
+			for (let method of packerMethods) {
+				if (method === data.packerMethod) {
 					methodValid = true;
 					break;
 				}
 			}
 
-			if(!methodValid) data.packerMethod = packer.defaultMethod;
+			if (!methodValid) data.packerMethod = packer.defaultMethod;
 
-			if(this.packerMethodRef?.current) {
+			if (this.packerMethodRef?.current) {
 				this.packerMethodRef.current.setValue(data.packerMethod);
 			}
 		}
@@ -159,14 +159,14 @@ class PackProperties extends React.Component<Props, State> {
 		return data;
 	}
 
-	saveOptions = (force=false) => {
-		if(PLATFORM === "web" || force) {
+	saveOptions = (force = false) => {
+		if (PLATFORM === "web" || force) {
 			Storage.save(STORAGE_OPTIONS_KEY, this.packOptions);
 		}
 	}
 
 	updatePackOptions = () => {
-		let data:PackOptions = {};
+		let data: PackOptions = {};
 
 		data.textureFormat = (this.textureFormatRef.current).value as "png" | "jpg";
 		data.removeFileExtension = (this.removeFileExtensionRef.current).checked;
@@ -238,7 +238,7 @@ class PackProperties extends React.Component<Props, State> {
 	}
 
 	onPackerChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-		this.setState({packer: e.target.value});
+		this.setState({ packer: e.target.value });
 		this.onPropChanged();
 	}
 
@@ -255,7 +255,7 @@ class PackProperties extends React.Component<Props, State> {
 		let allowRotationInput = this.allowRotationRef.current;
 
 		let doRefresh = (allowTrimInput.checked !== exporter.allowTrim) ||
-						(allowRotationInput.checked !== exporter.allowRotation);
+			(allowRotationInput.checked !== exporter.allowRotation);
 
 		allowTrimInput.checked = exporter.allowTrim;
 		allowRotationInput.checked = exporter.allowRotation;
@@ -263,7 +263,7 @@ class PackProperties extends React.Component<Props, State> {
 		this.updateEditCustomTemplateButton();
 
 		this.onExporterPropChanged();
-		if(doRefresh) this.onPropChanged();
+		if (doRefresh) this.onPropChanged();
 	}
 
 	updateEditCustomTemplateButton = () => {
@@ -278,29 +278,29 @@ class PackProperties extends React.Component<Props, State> {
 		TypedObserver.packExporterChanged.emit(this.getPackOptions());
 	}
 	eventForceUpdate = (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => {
-		if(!e) return;
+		if (!e) return;
 
-		if(e.code === "Enter" && e.ctrlKey) {
+		if (e.code === "Enter" && e.ctrlKey) {
 			this.onPropChanged();
 			return;
 		}
 
 		let key = e.keyCode || e.which;
-		if(key === 13) {
+		if (key === 13) {
 			this.onPropChanged();
 		}
 	}
 
 	eventForceUpdateExporter = (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => {
-		if(!e) return;
+		if (!e) return;
 
-		if(e.code === "Enter" && e.ctrlKey) {
+		if (e.code === "Enter" && e.ctrlKey) {
 			this.onExporterPropChanged();
 			return;
 		}
 
 		let key = e.keyCode || e.which;
-		if(key === 13) {
+		if (key === 13) {
 			this.onExporterPropChanged();
 		}
 	}
@@ -322,12 +322,12 @@ class PackProperties extends React.Component<Props, State> {
 	}*/
 
 	onStoredOrderChanged = (order: string[]) => {
-		this.setState({hasStoredOrder: order !== null && order.length > 0});
+		this.setState({ hasStoredOrder: order !== null && order.length > 0 });
 	}
 
 	override render() {
 		let exporter = getExporterByType(this.packOptions.exporter);
-		if(!exporter) return <span>Failed to load exporter, please reload the page, if issue persists, report it to the developer. Data: {JSON.stringify(this.packOptions)}</span>;
+		if (!exporter) return <span>Failed to load exporter, please reload the page, if issue persists, report it to the developer. Data: {JSON.stringify(this.packOptions)}</span>;
 		let allowRotation = this.packOptions.allowRotation && exporter.allowRotation;
 		let exporterRotationDisabled = !exporter.allowRotation;
 		let allowTrim = this.packOptions.allowTrim && exporter.allowTrim;
@@ -343,7 +343,7 @@ class PackProperties extends React.Component<Props, State> {
 									Export Options
 								</td>
 							</tr>
-							<tr title={I18.f("FILE_NAME_TITLE")} style={{display: PLATFORM === 'web' ? '' : 'none'}}>
+							<tr title={I18.f("FILE_NAME_TITLE")} style={{ display: PLATFORM === 'web' ? '' : 'none' }}>
 								<td>{I18.f("FILE_NAME")}</td>
 								<td><input ref={this.fileNameRef} className="border-color-gray" type="text" defaultValue={this.packOptions.fileName} onBlur={this.onExporterPropChanged} /></td>
 								<td></td>
@@ -377,9 +377,9 @@ class PackProperties extends React.Component<Props, State> {
 								<td>{I18.f("FORMAT")}</td>
 								<td>
 									<select ref={this.exporterRef} className="border-color-gray" onChange={this.onExporterChanged} defaultValue={this.packOptions.exporter}>
-									{exporters.map(node => {
-										return (<option key={"exporter-" + node.exporterName} defaultValue={node.exporterName}>{node.exporterName}</option>)
-									})}
+										{exporters.map(node => {
+											return (<option key={"exporter-" + node.exporterName} defaultValue={node.exporterName}>{node.exporterName}</option>)
+										})}
 									</select>
 								</td>
 								<td>
@@ -406,22 +406,22 @@ class PackProperties extends React.Component<Props, State> {
 
 							<tr title={I18.f("WIDTH_TITLE")}>
 								<td>{I18.f("WIDTH")}</td>
-								<td><input ref={this.widthRef} type="number" min="0" className="border-color-gray" defaultValue={this.packOptions.width} onBlur={this.onPropChanged} onKeyDown={this.eventForceUpdate}/></td>
+								<td><input ref={this.widthRef} type="number" min="0" className="border-color-gray" defaultValue={this.packOptions.width} onBlur={this.onPropChanged} onKeyDown={this.eventForceUpdate} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("HEIGHT_TITLE")}>
 								<td>{I18.f("HEIGHT")}</td>
-								<td><input ref={this.heightRef} type="number" min="0" className="border-color-gray" defaultValue={this.packOptions.height} onBlur={this.onPropChanged} onKeyDown={this.eventForceUpdate}/></td>
+								<td><input ref={this.heightRef} type="number" min="0" className="border-color-gray" defaultValue={this.packOptions.height} onBlur={this.onPropChanged} onKeyDown={this.eventForceUpdate} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("PADDING_TITLE")}>
 								<td>{I18.f("PADDING")}</td>
-								<td><input ref={this.spritePaddingRef} type="number" className="border-color-gray" defaultValue={this.packOptions.spritePadding} min="0" onInput={this.onPropChanged} onKeyDown={this.eventForceUpdate}/></td>
+								<td><input ref={this.spritePaddingRef} type="number" className="border-color-gray" defaultValue={this.packOptions.spritePadding} min="0" onInput={this.onPropChanged} onKeyDown={this.eventForceUpdate} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("EXTRUDE_TITLE")}>
 								<td>{I18.f("EXTRUDE")}</td>
-								<td><input ref={this.borderPaddingRef} type="number" className="border-color-gray" defaultValue={this.packOptions.borderPadding} min="0" onInput={this.onPropChanged} onKeyDown={this.eventForceUpdate}/></td>
+								<td><input ref={this.borderPaddingRef} type="number" className="border-color-gray" defaultValue={this.packOptions.borderPadding} min="0" onInput={this.onPropChanged} onKeyDown={this.eventForceUpdate} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("ALLOW_ROTATION_TITLE")}>
@@ -431,33 +431,33 @@ class PackProperties extends React.Component<Props, State> {
 							</tr>
 							<tr title={I18.f("ALLOW_TRIM_TITLE")}>
 								<td>{I18.f("ALLOW_TRIM")}</td>
-								<td><input ref={this.allowTrimRef} type="checkbox" className="border-color-gray" onChange={this.onPropChanged} defaultChecked={allowTrim}  disabled={exporterTrimDisabled} /></td>
+								<td><input ref={this.allowTrimRef} type="checkbox" className="border-color-gray" onChange={this.onPropChanged} defaultChecked={allowTrim} disabled={exporterTrimDisabled} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("DETECT_IDENTICAL_TITLE")}>
 								<td>{I18.f("DETECT_IDENTICAL")}</td>
-								<td><input ref={this.detectIdenticalRef} type="checkbox" className="border-color-gray" onChange={this.onPropChanged} defaultChecked={this.packOptions.detectIdentical}/></td>
+								<td><input ref={this.detectIdenticalRef} type="checkbox" className="border-color-gray" onChange={this.onPropChanged} defaultChecked={this.packOptions.detectIdentical} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("PACKER_TITLE")}>
 								<td>{I18.f("PACKER")}</td>
 								<td>
 									<select ref={this.packerRef} className="border-color-gray" onChange={this.onPackerChange} defaultValue={this.packOptions.packer}>
-									{packers.map(node => {
-										return (<option key={"packer-" + node.packerName} defaultValue={node.packerName}>{node.packerName}</option>)
-									})}
+										{packers.map(node => {
+											return (<option key={"packer-" + node.packerName} defaultValue={node.packerName}>{node.packerName}</option>)
+										})}
 									</select>
 								</td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("PACKER_METHOD_TITLE")}>
 								<td>{I18.f("PACKER_METHOD")}</td>
-								<td><PackerMethods ref={this.packerMethodRef} packer={this.state.packer} defaultMethod={this.packOptions.packerMethod} handler={this.onPropChanged}/></td>
+								<td><PackerMethods ref={this.packerMethodRef} packer={this.state.packer} defaultMethod={this.packOptions.packerMethod} handler={this.onPropChanged} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("SCALE_TITLE")}>
 								<td>{I18.f("SCALE")}</td>
-								<td><input ref={this.scaleRef} type="number" min="0" className="border-color-gray" defaultValue={this.packOptions.scale} onBlur={this.onPropChanged}/></td>
+								<td><input ref={this.scaleRef} type="number" min="0" className="border-color-gray" defaultValue={this.packOptions.scale} onBlur={this.onPropChanged} /></td>
 								<td></td>
 							</tr>
 							<tr>
@@ -505,7 +505,7 @@ class PackProperties extends React.Component<Props, State> {
 							</tr>
 							<tr title={I18.f("ALPHA_THRESHOLD_TITLE")}>
 								<td>{I18.f("ALPHA_THRESHOLD")}</td>
-								<td><input ref={this.alphaThresholdRef} type="number" className="border-color-gray" defaultValue={this.packOptions.alphaThreshold} min="0" max="255" onBlur={this.onPropChanged} onKeyDown={this.eventForceUpdate}/></td>
+								<td><input ref={this.alphaThresholdRef} type="number" className="border-color-gray" defaultValue={this.packOptions.alphaThreshold} min="0" max="255" onBlur={this.onPropChanged} onKeyDown={this.eventForceUpdate} /></td>
 								<td></td>
 							</tr>
 							<tr title={I18.f("FILTER_TITLE")}>
@@ -521,7 +521,7 @@ class PackProperties extends React.Component<Props, State> {
 							</tr>
 							<tr title={I18.f("STATS_SI_TITLE")}>
 								<td>{I18.f("STATS_SI")}</td>
-								<td><input ref={this.statsSIRef} type="number" className="border-color-gray" defaultValue={this.packOptions.statsSI} min="0" onBlur={this.onExporterPropChanged} onChange={this.onExporterPropChanged} onKeyDown={this.eventForceUpdateExporter}/></td>
+								<td><input ref={this.statsSIRef} type="number" className="border-color-gray" defaultValue={this.packOptions.statsSI} min="0" onBlur={this.onExporterPropChanged} onChange={this.onExporterPropChanged} onKeyDown={this.eventForceUpdateExporter} /></td>
 								<td></td>
 							</tr>
 						</tbody>
@@ -548,31 +548,31 @@ class PackerMethods extends React.Component<PackerMethodsProps, {
 		super(props);
 
 		this.value = this.props.defaultMethod;
-		this.state = {value: this.value};
+		this.state = { value: this.value };
 	}
 
 	setValue(val: string) {
 		this.value = val;
-		this.setState({value: val});
+		this.setState({ value: val });
 	}
 
 	onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		this.value = e.target.value;
-		this.setState({value: this.value});
+		this.setState({ value: this.value });
 		this.props.handler(e);
 	}
 
 	override render() {
 		let packerCls = getPackerByType(this.props.packer);
 
-		if(!packerCls) {
+		if (!packerCls) {
 			throw new Error("Unknown packer " + this.props.packer);
 		}
 
 		let items = [];
 
 		let methods = Object.keys(packerCls.methods);
-		for(let item of methods) {
+		for (let item of methods) {
 			items.push(<option value={item} key={"packer-method-" + item}>{item}</option>);
 		}
 

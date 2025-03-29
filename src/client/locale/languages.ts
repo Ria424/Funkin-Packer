@@ -33,10 +33,10 @@ export const languages: Language[] = [
 
 const ALL_KEYS = Object.keys(languages[0].mapping);
 
-if(DEBUG) {
-	for(const item of languages) {
-		for(const key of ALL_KEYS) {
-			if(!item.mapping[key]) {
+if (DEBUG) {
+	for (const item of languages) {
+		for (const key of ALL_KEYS) {
+			if (!item.mapping[key]) {
 				console.warn(`Missing key in language ${item.lang}.json: ${key}`);
 			}
 		}

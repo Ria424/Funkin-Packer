@@ -24,12 +24,17 @@ mustache.Formatters = {
 	escapeName: (name) => name.replace(/%/g, "%25").replace(/#/g, "%23").replace(/:/g, "%3A").replace(/;/g, "%3B").replace(/\\/g, "-").replace(/\//g, "-")
 };
 
-export default function finishExporter(exporter:Exporter, renderOptions:TemplateSettings, resolve:(value: string | PromiseLike<string>) => void, reject:(value: string | PromiseLike<string>) => void) {
+export default function finishExporter(
+	exporter: Exporter,
+	renderOptions: TemplateSettings,
+	resolve: (value: string | PromiseLike<string>) => void,
+	reject: (value: string | PromiseLike<string>) => void
+) {
 	try {
 		let ret = mustache.render(exporter?.content ?? "", renderOptions);
 		resolve(ret);
 	}
-	catch(e: any) {
+	catch (e: any) {
 		reject(e.message);
 	}
 }

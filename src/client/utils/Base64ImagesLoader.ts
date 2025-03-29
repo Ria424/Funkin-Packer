@@ -21,13 +21,13 @@ class Base64ImagesLoader {
 		this.onEnd = null;
 	}
 
-	load = (data: Base64LoaderData[], onProgress:(loaded: number) => void, onEnd:(data: LoadedImages) => void) => {
+	load = (data: Base64LoaderData[], onProgress: (loaded: number) => void, onEnd: (data: LoadedImages) => void) => {
 		this.data = data.slice();
 
 		this.onProgress = onProgress;
 		this.onEnd = onEnd;
 
-		for(let item of data) {
+		for (let item of data) {
 			let img = new CustomImage(new Image(), item.fsPath.name, item.fsPath.path, item.fsPath.folder);
 			img.src = item.url;
 			img.base64 = item.url;
@@ -44,8 +44,8 @@ class Base64ImagesLoader {
 		let loaded = 0;
 		let keys = Object.keys(this.loaded);
 
-		for(let key of keys) {
-			if(!this.loaded[key].complete) {
+		for (let key of keys) {
+			if (!this.loaded[key].complete) {
 				ready = false;
 			}
 			else {
@@ -53,11 +53,11 @@ class Base64ImagesLoader {
 			}
 		}
 
-		if(ready) {
-			if(this.onEnd) this.onEnd(this.loaded);
+		if (ready) {
+			if (this.onEnd) this.onEnd(this.loaded);
 		}
 		else {
-			if(this.onProgress) this.onProgress(loaded / keys.length);
+			if (this.onProgress) this.onProgress(loaded / keys.length);
 			setTimeout(this.waitImages, 50);
 		}
 	}

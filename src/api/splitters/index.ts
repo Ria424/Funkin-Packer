@@ -26,7 +26,7 @@ export const list: Splitter[] = [
 	new AtlasSpritemap()
 ] as const;
 
-function getDefaultSplitter():Splitter {
+function getDefaultSplitter(): Splitter {
 	return new Sparrow();
 }
 
@@ -45,21 +45,21 @@ export class SplitterMaster {
 
 	getListOfSplittersNames = () => {
 		const names = [];
-		for(const item of list) {
+		for (const item of list) {
 			names.push(item.splitterName);
 		}
 		return names;
 	}
 
 	getCurrentSplitter = () => {
-		if(this.currentSplitter === null)
+		if (this.currentSplitter === null)
 			return getDefaultSplitter();
 		return this.currentSplitter;
 	}
 
 	getSplitterFromName = (name: string) => {
-		for(const item of list) {
-			if(item.splitterName === name) {
+		for (const item of list) {
+			if (item.splitterName === name) {
 				return item;
 			}
 		}
@@ -67,16 +67,16 @@ export class SplitterMaster {
 	}
 
 	findSplitter = (data: string) => {
-		for(const item of list) {
-			if(item.splitterName === GridSplitter.splitterName) continue;
+		for (const item of list) {
+			if (item.splitterName === GridSplitter.splitterName) continue;
 
 			let isValid = false;
 			item.doCheck(item.cleanData(data), (checked) => {
-				if(checked) {
+				if (checked) {
 					isValid = true;
 				}
 			});
-			if(isValid) {
+			if (isValid) {
 				return item;
 			}
 		}
@@ -85,29 +85,29 @@ export class SplitterMaster {
 	}
 
 	loadSplitter = (splitter: Splitter) => {
-		if(splitter === null)
+		if (splitter === null)
 			this.currentSplitter = getDefaultSplitter();
 		else
 			this.currentSplitter = splitter;
 	}
 
 	finishSplit = () => {
-		if(this._storedSplitterOrder === null) return;
+		if (this._storedSplitterOrder === null) return;
 		APP.i.api.setStoredOrder(this._storedSplitterOrder);
 		TypedObserver.storedOrderChanged.emit(this._storedSplitterOrder);
 		this._storedSplitterOrder = null;
 	}
 
 	cleanData = (data: string) => {
-		if(this.currentSplitter === null) {
+		if (this.currentSplitter === null) {
 			throw new Error("No splitter found");
 		}
 
 		return this.currentSplitter.cleanData(data);
 	}
 
-	splitData = (data:string, options:SplitterOptions, cb: (res: Rect[]) => void) => {
-		if(this.currentSplitter === null) {
+	splitData = (data: string, options: SplitterOptions, cb: (res: Rect[]) => void) => {
+		if (this.currentSplitter === null) {
 			throw new Error("No splitter found");
 		}
 
@@ -117,11 +117,11 @@ export class SplitterMaster {
 
 		this.currentSplitter.options = options;
 		this.currentSplitter.doSplit(data, (res) => {
-			if(res === false)
+			if (res === false)
 				return cb([]);
 
 			const order = [];
-			for(const item of res) {
+			for (const item of res) {
 				order.push(item.name);
 			}
 

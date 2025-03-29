@@ -7,7 +7,7 @@ export default [
 	js.configs.all,
 	//tseslint.configs.recommended,
 	//tseslint.configs.stylistic,
-	{ignores: ["dist"]},
+	{ ignores: ["dist"] },
 	{
 		//files: ["src/*.js", "src/*.jsx", "src/*.ts", "src/*.tsx"],
 		languageOptions: {

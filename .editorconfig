@@ -11,4 +11,3 @@ indent_size=4
 [{.babelrc,.eslintrc,jsconfig.json,package.json,.stylelintrc,jest.config,.eslintrc,.prettierrc,*.json,*.jsb3,*.jsb2,*.bowerrc}]
 indent_style=tab
 indent_size=4
-

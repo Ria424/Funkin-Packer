@@ -26,7 +26,7 @@ const argv = {
 }
 
 //if(true) {
-	entry.unshift('core-js/stable');
+entry.unshift('core-js/stable');
 //}
 
 let PLATFORM = argv.platform || 'web';
@@ -55,7 +55,7 @@ if (argv.build) {
 
 	plugins.push(new CopyPlugin({
 		patterns: [
-			{from: 'src/client/resources', to: outputDir, globOptions: {ignore: ['**/.DS_Store']}}
+			{ from: 'src/client/resources', to: outputDir, globOptions: { ignore: ['**/.DS_Store'] } }
 		],
 	}));
 
@@ -67,7 +67,7 @@ else {
 	entry.push('webpack-dev-server/client?http://localhost:4000');
 	plugins.push(new CopyPlugin({
 		patterns: [
-			{from: 'src/client/resources', to: '', globOptions: {ignore: ['**/.DS_Store']}},
+			{ from: 'src/client/resources', to: '', globOptions: { ignore: ['**/.DS_Store'] } },
 		],
 	}));
 }
@@ -94,7 +94,7 @@ const config = {
 			{
 				test: /\.tsx$/,
 				use: [
-					{loader: 'ts-loader'},
+					{ loader: 'ts-loader' },
 					//{loader: 'babel-loader', options: {presets: ['@babel/preset-react', '@babel/preset-env']}}
 				],
 				exclude: /node_modules/,
@@ -102,7 +102,7 @@ const config = {
 			{
 				test: /\.ts$/,
 				use: [
-					{loader: 'ts-loader'},
+					{ loader: 'ts-loader' },
 					//{loader: 'babel-loader', options: {presets: ['@babel/preset-env']}}
 				],
 				exclude: /node_modules/,
@@ -110,20 +110,20 @@ const config = {
 			{
 				test: /.jsx?$/,
 				include: [path.resolve(__dirname, 'src')],
-				use: [{loader: 'babel-loader', options: {presets: ['@babel/preset-react', '@babel/preset-env']}}]
+				use: [{ loader: 'babel-loader', options: { presets: ['@babel/preset-react', '@babel/preset-env'] } }]
 			},
 			{
 				test: /\.js$/,
 				include: [path.resolve(__dirname, 'src')],
-				use: [{loader: 'babel-loader', options: {presets: ['@babel/preset-env']}}]
+				use: [{ loader: 'babel-loader', options: { presets: ['@babel/preset-env'] } }]
 			},
 			{
 				test: /\.(html|htm)$/,
-				use: [{loader: 'dom'}]
+				use: [{ loader: 'dom' }]
 			},
 			{
 				test: /\.mst$/,
-				use: [{loader: 'raw-loader'}]
+				use: [{ loader: 'raw-loader' }]
 			}
 		]
 	},
@@ -136,11 +136,11 @@ const config = {
 
 if (target === 'electron-renderer') {
 	config.resolve = {
-		alias: {'platform': path.resolve(__dirname, './src/client/platform/electron')}
+		alias: { 'platform': path.resolve(__dirname, './src/client/platform/electron') }
 	};
 } else {
 	config.resolve = {
-		alias: {'platform': path.resolve(__dirname, './src/client/platform/web')}
+		alias: { 'platform': path.resolve(__dirname, './src/client/platform/web') }
 	};
 }
 config.resolve.alias.api = path.resolve(__dirname, './src/api');

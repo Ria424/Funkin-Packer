@@ -24,28 +24,28 @@ type Phaser3Frame = {
 }
 
 class Phaser3 extends Splitter {
-    override doCheck(data: string, cb: (checked: boolean) => void) {
-        try {
-            const json = JSON.parse(data);
+	override doCheck(data: string, cb: (checked: boolean) => void) {
+		try {
+			const json = JSON.parse(data);
 
-            cb(json && json.textures && Array.isArray(json.textures));
-        } catch (e) {
-			if(DEBUG)
+			cb(json && json.textures && Array.isArray(json.textures));
+		} catch (e) {
+			if (DEBUG)
 				console.error(e);
-            cb(false);
-        }
-    }
+			cb(false);
+		}
+	}
 
-    override doSplit(data: string, cb: (res: Rect[] | false) => void) {
-        const res = [];
+	override doSplit(data: string, cb: (res: Rect[] | false) => void) {
+		const res = [];
 
-        try {
-            const json = JSON.parse(data) as Phaser3Format;
+		try {
+			const json = JSON.parse(data) as Phaser3Format;
 
-            for (const texture of json.textures) {
-                for (const item of texture.frames) {
+			for (const texture of json.textures) {
+				for (const item of texture.frames) {
 					const trimmed = item.trimmed || item.frame.w < item.spriteSourceSize.w || item.frame.h < item.spriteSourceSize.h;
-                    res.push({
+					res.push({
 						name: Splitter.fixFileName(item.filename),
 						frame: {
 							x: item.frame.x,
@@ -72,16 +72,16 @@ class Phaser3 extends Splitter {
 						trimmed: trimmed,
 						rotated: item.rotated ?? false
 					});
-                }
-            }
+				}
+			}
 
 			cb(res);
-        } catch (e) {
-			if(DEBUG)
+		} catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}
-    }
+	}
 
 	override get splitterName() {
 		return 'Phaser 3';

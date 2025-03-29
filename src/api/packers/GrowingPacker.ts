@@ -51,14 +51,14 @@ class GrowingPacker extends Packer {
 		this.height = height;
 	}
 
-	static override get defaultMethod():MethodType {
+	static override get defaultMethod(): MethodType {
 		return METHODS.Sorted;
 	}
 
-	override pack(_data:Rect[], _method:MethodType):Rect[] {
-		const blocks:Block[] = [];
+	override pack(_data: Rect[], _method: MethodType): Rect[] {
+		const blocks: Block[] = [];
 		for (const item of _data) {
-			const block:Block = {
+			const block: Block = {
 				w: item.frame.w,
 				h: item.frame.h,
 				rect: item
@@ -66,18 +66,18 @@ class GrowingPacker extends Packer {
 			blocks.push(block);
 		}
 
-		if(_method == METHODS.Sorted)
+		if (_method == METHODS.Sorted)
 			blocks.sort((a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h));
-		if(_method == METHODS.SortedHeight)
+		if (_method == METHODS.SortedHeight)
 			blocks.sort((a, b) => b.h - a.h);
-		if(_method == METHODS.SortedWidth)
+		if (_method == METHODS.SortedWidth)
 			blocks.sort((a, b) => b.w - a.w);
-		if(_method == METHODS.SortedArea)
+		if (_method == METHODS.SortedArea)
 			blocks.sort((a, b) => (b.w * b.h) - (a.w * a.h));
-		//blocks.sort((a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h));
+		// blocks.sort((a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h));
 
-		//blocks.sort((a, b) => (a.rect.frame.w * a.rect.frame.h) - (b.rect.frame.w * b.rect.frame.h));
-		//console.log("GrowingPacker: blocks", blocks);
+		// blocks.sort((a, b) => (a.rect.frame.w * a.rect.frame.h) - (b.rect.frame.w * b.rect.frame.h));
+		// console.log("GrowingPacker: blocks", blocks);
 
 		const len = blocks.length;
 		let padding = this.padding;
@@ -86,7 +86,7 @@ class GrowingPacker extends Packer {
 		// @ts-ignore
 		const h = len > 0 ? blocks[0].h + padding : 0;
 		this.root = { x: 0, y: 0, w: w, h: h };
-		for(let block of blocks) {
+		for (let block of blocks) {
 			let node = this.findNode(this.root, block.w + padding, block.h + padding);
 			if (node !== null)
 				block.fit = this.splitNode(node, block.w + padding, block.h + padding);
@@ -94,23 +94,23 @@ class GrowingPacker extends Packer {
 				block.fit = this.growNode(block.w + padding, block.h + padding);
 		}
 
-		const rects:Rect[] = [];
+		const rects: Rect[] = [];
 
-		for(let block of blocks) {
-			if(!block.fit) continue;
+		for (let block of blocks) {
+			if (!block.fit) continue;
 			block.rect.frame.x = block.fit.x;
 			block.rect.frame.y = block.fit.y;
 			block.fit.w -= padding;
 			block.fit.h -= padding;
-			//if(block.rect.frame.w !== block.fit.w || block.rect.frame.h !== block.fit.h)
-			//	console.log("GrowingPacker: rect.frame.w !== fit.w || rect.frame.h !== fit.h", block.rect.frame, block.fit);
+			// if (block.rect.frame.w !== block.fit.w || block.rect.frame.h !== block.fit.h)
+			// 	console.log("GrowingPacker: rect.frame.w !== fit.w || rect.frame.h !== fit.h", block.rect.frame, block.fit);
 			rects.push(block.rect);
 		}
 
 		return rects;
 	}
 
-	private findNode = (root:Node | null | undefined, w:number, h:number):Node | null => {
+	private findNode = (root: Node | null | undefined, w: number, h: number): Node | null => {
 		if (!root)
 			return null;
 		if (root.used)
@@ -120,19 +120,19 @@ class GrowingPacker extends Packer {
 		return null;
 	}
 
-	private splitNode = (node:Node, w:number, h:number) => {
+	private splitNode = (node: Node, w: number, h: number) => {
 		node.used = true;
-		node.down  = { x: node.x,     y: node.y + h, w: node.w,     h: node.h - h };
-		node.right = { x: node.x + w, y: node.y,     w: node.w - w, h: h          };
+		node.down = { x: node.x, y: node.y + h, w: node.w, h: node.h - h };
+		node.right = { x: node.x + w, y: node.y, w: node.w - w, h: h };
 		return node;
 	}
 
-	private growNode = (w:number, h:number) => {
-		const canGrowDown  = (w <= this.root.w);
+	private growNode = (w: number, h: number) => {
+		const canGrowDown = (w <= this.root.w);
 		const canGrowRight = (h <= this.root.h);
 
 		const shouldGrowRight = canGrowRight && (this.root.h >= (this.root.w + w)); // attempt to keep square-ish by growing right when height is much greater than width
-		const shouldGrowDown  = canGrowDown  && (this.root.w >= (this.root.h + h)); // attempt to keep square-ish by growing down  when width  is much greater than height
+		const shouldGrowDown = canGrowDown && (this.root.w >= (this.root.h + h)); // attempt to keep square-ish by growing down  when width  is much greater than height
 
 		if (shouldGrowRight)
 			return this.growRight(w, h);
@@ -146,7 +146,7 @@ class GrowingPacker extends Packer {
 		return null; // need to ensure sensible root starting size to avoid this happening
 	}
 
-	private growRight = (w:number, h:number) => {
+	private growRight = (w: number, h: number) => {
 		this.root = {
 			used: true,
 			x: 0,
@@ -162,14 +162,14 @@ class GrowingPacker extends Packer {
 		return null;
 	}
 
-	private growDown = (w:number, h:number) => {
+	private growDown = (w: number, h: number) => {
 		this.root = {
 			used: true,
 			x: 0,
 			y: 0,
 			w: this.root.w,
 			h: this.root.h + h,
-			down:  { x: 0, y: this.root.h, w: this.root.w, h: h },
+			down: { x: 0, y: this.root.h, w: this.root.w, h: h },
 			right: this.root
 		};
 		let node = this.findNode(this.root, w, h);
@@ -182,7 +182,7 @@ class GrowingPacker extends Packer {
 		return "GrowingPacker";
 	}
 
-	static override get methods():MethodList {
+	static override get methods(): MethodList {
 		return METHODS;
 	}
 
@@ -190,8 +190,8 @@ class GrowingPacker extends Packer {
 		return true;
 	}
 
-	static override getMethodProps(id:MethodType) {
-		return {name: "Default", description: "Default placement"};
+	static override getMethodProps(id: MethodType) {
+		return { name: "Default", description: "Default placement" };
 	}
 }
 

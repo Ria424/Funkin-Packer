@@ -12,7 +12,7 @@ class OptimalPacker extends Packer {
 		super(width, height, allowRotate, padding);
 	}
 
-	override pack(_data:Rect[], _method:MethodType):Rect[] {
+	override pack(_data: Rect[], _method: MethodType): Rect[] {
 		throw new Error('OptimalPacker is a dummy and cannot be used directly');
 	}
 
@@ -20,11 +20,11 @@ class OptimalPacker extends Packer {
 		return "OptimalPacker";
 	}
 
-	static override get defaultMethod():MethodType {
+	static override get defaultMethod(): MethodType {
 		return METHODS.Automatic;
 	}
 
-	static override get methods():MethodList {
+	static override get methods(): MethodList {
 		return METHODS;
 	}
 
@@ -32,10 +32,10 @@ class OptimalPacker extends Packer {
 		return true;
 	}
 
-	static override getMethodProps(id:MethodType) {
-		switch(id) {
+	static override getMethodProps(id: MethodType) {
+		switch (id) {
 			case METHODS.Automatic:
-				return {name: "Automatic", description: ""};
+				return { name: "Automatic", description: "" };
 			default:
 				throw Error("Unknown method " + id);
 		}

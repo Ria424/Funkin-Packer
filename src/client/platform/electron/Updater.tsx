@@ -34,9 +34,9 @@ class Updater extends React.Component<Props, State> {
 		Observer.on(GLOBAL_EVENT.DOWNLOAD_PROGRESS_CHANGED, this.changeDownloadProgress, this);
 
 		this.skippedVersion = Storage.load(STORAGE_SKIPPED_VERSIONS_KEY);
-		if(!Array.isArray(this.skippedVersion)) this.skippedVersion = [];
+		if (!Array.isArray(this.skippedVersion)) this.skippedVersion = [];
 
-		if(this.skippedVersion.indexOf(this.props.data.releaseName) >= 0) this.close();
+		if (this.skippedVersion.indexOf(this.props.data.releaseName) >= 0) this.close();
 	}
 
 	close = () => {
@@ -46,8 +46,8 @@ class Updater extends React.Component<Props, State> {
 
 	skip = () => {
 		let buttons = [
-			{name: "yes", caption: I18.f("YES"), callback: this.doSkip},
-			{name: "no", caption: I18.f("NO")}
+			{ name: "yes", caption: I18.f("YES"), callback: this.doSkip },
+			{ name: "no", caption: I18.f("NO") }
 		];
 
 		TypedObserver.showMessage.emit(I18.f("SKIP_VERSION_CONFIRM"), buttons);
@@ -60,11 +60,11 @@ class Updater extends React.Component<Props, State> {
 	}
 
 	changeDownloadProgress = (val: number) => {
-		this.setState({downloadProgress: val});
+		this.setState({ downloadProgress: val });
 	}
 
 	install = () => {
-		this.setState({installation: true});
+		this.setState({ installation: true });
 		Observer.emit(GLOBAL_EVENT.INSTALL_UPDATE);
 	}
 
@@ -78,20 +78,20 @@ class Updater extends React.Component<Props, State> {
 
 					{
 						this.state.installation
-						?
-						(
-							<div className="updater-download">
-								<div ref={this.downloadProgressRef} className="updater-download-progress" style={{width: this.state.downloadProgress+"%"}}></div>
-							</div>
-						)
-						:
-						(
-							<div className="updater-controls">
-								<div className="btn back-600 border-color-gray color-white" onClick={this.close}>{I18.f("CLOSE")}</div>
-								<div className="btn back-600 border-color-gray color-white" onClick={this.skip}>{I18.f("SKIP_VERSION")}</div>
-								<div className="btn back-600 border-color-gray color-white" onClick={this.install}>{I18.f("INSTALL")}</div>
-							</div>
-						)
+							?
+							(
+								<div className="updater-download">
+									<div ref={this.downloadProgressRef} className="updater-download-progress" style={{ width: this.state.downloadProgress + "%" }}></div>
+								</div>
+							)
+							:
+							(
+								<div className="updater-controls">
+									<div className="btn back-600 border-color-gray color-white" onClick={this.close}>{I18.f("CLOSE")}</div>
+									<div className="btn back-600 border-color-gray color-white" onClick={this.skip}>{I18.f("SKIP_VERSION")}</div>
+									<div className="btn back-600 border-color-gray color-white" onClick={this.install}>{I18.f("INSTALL")}</div>
+								</div>
+							)
 					}
 				</div>
 			</div>

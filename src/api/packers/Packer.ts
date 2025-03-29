@@ -6,9 +6,9 @@ export type PackerClass = {
 	readonly packerName: string,
 	readonly methods: MethodList,
 	readonly defaultMethod: string,
-	getMethodProps(name:string): {name: string, description: string},
+	getMethodProps(name: string): { name: string, description: string },
 	needsNonRotation(): boolean,
-	new(width: number, height: number, allowRotate?: boolean, padding?: number):Packer
+	new(width: number, height: number, allowRotate?: boolean, padding?: number): Packer
 };
 
 export type PackerCombo = Readonly<{
@@ -26,7 +26,7 @@ class Packer {
 		// nothing to do
 	}
 
-	pack(_data:Rect[], _method:string):Rect[] {
+	pack(_data: Rect[], _method: string): Rect[] {
 		throw Error("Abstract method. Override it.");
 	}
 
@@ -34,11 +34,11 @@ class Packer {
 		return "Default";
 	}
 
-	static get defaultMethod():string {
+	static get defaultMethod(): string {
 		return METHODS.Default;
 	}
 
-	static get methods():MethodList {
+	static get methods(): MethodList {
 		return METHODS;
 	}
 
@@ -46,8 +46,8 @@ class Packer {
 		return true;
 	}
 
-	static getMethodProps(id:string) {
-		return {name: "Default", description: "Default placement"};
+	static getMethodProps(id: string) {
+		return { name: "Default", description: "Default placement" };
 	}
 }
 

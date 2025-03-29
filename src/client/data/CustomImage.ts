@@ -27,12 +27,12 @@ class CustomImage {
 
 	fsPath: FileSystemPath;
 
-	private _blobString:string;
-	private _blob:Blob;
+	private _blobString: string;
+	private _blob: Blob;
 
 	constructor(image: HTMLImageElement, name?: string, path?: string, folder?: string) {
 		this.image = image;
-		if(name && path && folder) {
+		if (name && path && folder) {
 			this.fsPath = { name, path, folder } as const;
 		}
 		this._blobString = null;
@@ -59,8 +59,8 @@ class CustomImage {
 	}
 
 	get blobSrc() {
-		if(!globalThis.Blob) return this.image.src; // fallback
-		if(this._blob === null) {
+		if (!globalThis.Blob) return this.image.src; // fallback
+		if (this._blob === null) {
 			this._blob = dataURItoBlob(this.src);
 			this._blobString = URL.createObjectURL(this._blob);
 		}

@@ -32,7 +32,7 @@ type RawSparrowFrame = {
 
 class Sparrow extends Splitter {
 	override doCheck(data: string, cb: (checked: boolean) => void) {
-		if(!data) {
+		if (!data) {
 			cb(false);
 			return;
 		}
@@ -40,27 +40,27 @@ class Sparrow extends Splitter {
 		try {
 			var parser = new XmlParser();
 			parser.parseString(data, (err, atlas) => {
-				if(err) {
+				if (err) {
 					throw err;
 				}
 
 				cb(atlas.TextureAtlas && Array.isArray(atlas.TextureAtlas.SubTexture));
 			});
 		}
-		catch(e) {
+		catch (e) {
 			try {
 				console.log("Trying to parse as Haxe Xml");
 				const atlas = HaxeXmlParser.parse(data, false);
 				console.log("Parsed as Haxe Xml");
 				//console.log(atlas);
-				if(atlas.hasElement("TextureAtlas")) {
+				if (atlas.hasElement("TextureAtlas")) {
 					const list = atlas.firstElement();
 					const arr = list.elementsNamed("SubTexture");
 					cb(arr.length > 0);
 				} else {
 					cb(false);
 				}
-			} catch(e) {
+			} catch (e) {
 				console.error(e);
 				cb(false);
 			}
@@ -68,7 +68,7 @@ class Sparrow extends Splitter {
 	}
 
 	override doSplit(data: string, cb: (res: Rect[] | false) => void) {
-		if(!data) {
+		if (!data) {
 			cb(false);
 			return;
 		}
@@ -78,13 +78,13 @@ class Sparrow extends Splitter {
 		try {
 			var parser = new XmlParser();
 			parser.parseString(data, (err, atlas) => {
-				if(err) {
+				if (err) {
 					throw err;
 				}
 
 				let list = atlas.TextureAtlas.SubTexture;
 
-				for(let li of list) {
+				for (let li of list) {
 					let attribs = li.$;
 
 					res.push(this.convertToRect({
@@ -104,11 +104,11 @@ class Sparrow extends Splitter {
 				cb(res);
 			});
 		}
-		catch(e) {
+		catch (e) {
 			try {
 				const atlas = HaxeXmlParser.parse(data, false).firstElement();
 				const rects = atlas.elementsNamed("SubTexture");
-				for(const rect of rects) {
+				for (const rect of rects) {
 					res.push(this.convertToRect({
 						name: rect.get("name"),
 						x: rect.get("x"),
@@ -124,7 +124,7 @@ class Sparrow extends Splitter {
 				}
 				cb(res);
 				return;
-			} catch(e) {
+			} catch (e) {
 				console.error(e);
 			}
 		}
@@ -132,11 +132,11 @@ class Sparrow extends Splitter {
 		cb(res);
 	}
 
-	private convertToRect(attribs:RawSparrowFrame): Rect {
+	private convertToRect(attribs: RawSparrowFrame): Rect {
 		const name = Splitter.fixFileName(attribs.name);
 
 		const rotated = attribs.rotated === 'true';
-		if(rotated) {
+		if (rotated) {
 			// Unsure if i should swap the offsets too?
 			const temp = attribs.width;
 			attribs.width = attribs.height;
@@ -159,7 +159,7 @@ class Sparrow extends Splitter {
 			rotated: rotated
 		};
 
-		if(attribs.frameX) {
+		if (attribs.frameX) {
 			item.frameX = -parseInt(attribs.frameX, 10);
 			item.frameY = -parseInt(attribs.frameY, 10);
 			item.frameWidth = parseInt(attribs.frameWidth, 10);

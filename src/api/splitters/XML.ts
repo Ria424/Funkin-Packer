@@ -5,7 +5,7 @@ import { Parser as XmlParser } from 'xml2js';
 
 class XML extends Splitter {
 	override doCheck(data: string, cb: (checked: boolean) => void) {
-		if(!data) {
+		if (!data) {
 			cb(false);
 			return;
 		}
@@ -13,7 +13,7 @@ class XML extends Splitter {
 		try {
 			var parser = new XmlParser();
 			parser.parseString(data, (err, atlas) => {
-				if(err) {
+				if (err) {
 					cb(false);
 					return;
 				}
@@ -21,13 +21,13 @@ class XML extends Splitter {
 				cb(atlas.TextureAtlas && Array.isArray(atlas.TextureAtlas.sprite));
 			});
 		}
-		catch(e) {
+		catch (e) {
 			cb(false);
 		}
 	}
 
 	override doSplit(data: string, cb: (res: Rect[] | false) => void) {
-		if(!data) {
+		if (!data) {
 			cb(false);
 			return;
 		}
@@ -35,7 +35,7 @@ class XML extends Splitter {
 		try {
 			var parser = new XmlParser();
 			parser.parseString(data, (err, atlas) => {
-				if(err) {
+				if (err) {
 					cb(false);
 					return;
 				}
@@ -44,7 +44,7 @@ class XML extends Splitter {
 
 				const list = atlas.TextureAtlas.sprite;
 
-				for(let item of list) {
+				for (let item of list) {
 					item = item.$;
 
 					item.x *= 1;
@@ -90,7 +90,7 @@ class XML extends Splitter {
 				cb(res);
 			});
 		}
-		catch(e) {
+		catch (e) {
 			cb(false);
 		}
 	}

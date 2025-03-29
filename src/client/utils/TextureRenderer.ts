@@ -9,7 +9,7 @@ class TextureRenderer {
 	width: number;
 	height: number;
 
-	constructor(data:Rect[], options={}) {
+	constructor(data: Rect[], options = {}) {
 		this.buffer = document.createElement("canvas");
 
 		this.width = 0;
@@ -18,17 +18,17 @@ class TextureRenderer {
 		this.render(data, options);
 	}
 
-	render(data:Rect[], options:PackOptions={}) {
+	render(data: Rect[], options: PackOptions = {}) {
 		const ctx = this.buffer.getContext("2d");
 
-		if(!ctx) {
+		if (!ctx) {
 			Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 			TypedObserver.showMessage.emit(I18.f('ERROR_NO_CONTEXT'));
 
 			return;
 		}
 
-		if(PROFILER)
+		if (PROFILER)
 			console.time("render");
 
 		const { width, height } = getSheetSize(data, options);
@@ -40,11 +40,11 @@ class TextureRenderer {
 
 		ctx.clearRect(0, 0, width, height);
 
-		for(let item of data) {
+		for (let item of data) {
 			this.renderItem(ctx, item, options);
 		}
 
-		if(PROFILER)
+		if (PROFILER)
 			console.timeEnd("render");
 	}
 
@@ -131,10 +131,10 @@ class TextureRenderer {
 	}*/
 
 	private renderItem(ctx: CanvasRenderingContext2D, item: Rect, _options: PackOptions) {
-		if(item.skipRender) return;
+		if (item.skipRender) return;
 
 		const img = item.image;
-		if(!img) return;
+		if (!img) return;
 
 		if (item.rotated) {
 			ctx.save();

@@ -11,7 +11,7 @@ import type { LoadedImages } from 'api/types';
 import type { FileSystemPath } from 'data/CustomImage';
 import type { FileFilter, SaveDialogOptions } from 'electron';
 
-const filters:FileFilter[] = [
+const filters: FileFilter[] = [
 	{ name: "Funkin Packer", extensions: ['fnfp'] },
 	{ name: "Free texture packer", extensions: ['ftpp'] }
 ];
@@ -149,7 +149,7 @@ class FileSystem {
 	}
 
 	static loadImages(list: FileSystemPath[], cb: (res: LoadedImages) => void) {
-		let files:Base64LoaderData[] = [];
+		let files: Base64LoaderData[] = [];
 
 		for (let item of list) {
 			let path = item.path;

@@ -4,7 +4,7 @@ import Grayscale from './Grayscale';
 
 export type FilterClass = {
 	readonly type: string,
-	new():Filter
+	new(): Filter
 };
 
 const list: FilterClass[] = [
@@ -13,11 +13,11 @@ const list: FilterClass[] = [
 	Grayscale
 ] as const;
 
-export function getFilterByType(type:string | undefined | null):FilterClass {
-	if(!type) return Filter;
+export function getFilterByType(type: string | undefined | null): FilterClass {
+	if (!type) return Filter;
 
-	for(let item of list) {
-		if(item.type === type) {
+	for (let item of list) {
+		if (item.type === type) {
 			return item;
 		}
 	}

@@ -4,7 +4,7 @@ class Filter {
 	}
 
 	apply(buffer: HTMLCanvasElement) {
-		if(!this.shouldApply(buffer)) return buffer;
+		if (!this.shouldApply(buffer)) return buffer;
 
 		let retCanvas = document.createElement("canvas");
 		let retCtx = retCanvas.getContext("2d");
@@ -14,7 +14,7 @@ class Filter {
 
 		let bufferCtx = buffer.getContext("2d");
 
-		if(!bufferCtx || !retCtx) {
+		if (!bufferCtx || !retCtx) {
 			throw new Error("No canvas context");
 		}
 

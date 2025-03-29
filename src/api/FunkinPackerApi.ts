@@ -7,15 +7,15 @@ import { ApiError, ErrorCodes } from "./Errors";
 export default class FunkinPackerApi {
 	private images: LoadedImages;
 	private options: PackOptions;
-	private onComplete: (res:unknown) => void;
-	private onError: (err:string) => void;
+	private onComplete: (res: unknown) => void;
+	private onError: (err: string) => void;
 
 	private storedOrder: string[] | null = null;
 
 	constructor() {
 		this.options = {};
-		this.onComplete = () => {};
-		this.onError = () => {};
+		this.onComplete = () => { };
+		this.onError = () => { };
 	}
 
 	public hasStoredOrder = () => {
@@ -30,12 +30,12 @@ export default class FunkinPackerApi {
 		this.images = null;
 		this.options = {};
 		this.storedOrder = null;
-		this.onComplete = () => {};
-		this.onError = () => {};
+		this.onComplete = () => { };
+		this.onError = () => { };
 	}
 
 	public setStoredOrderObserver: TypedObserver<string[]> = new TypedObserver();
-	public setStoredOrder(order:string[]) {
+	public setStoredOrder(order: string[]) {
 		this.storedOrder = order;
 		this.setStoredOrderObserver.emit(order);
 	}
@@ -45,22 +45,22 @@ export default class FunkinPackerApi {
 	}
 
 	public setLoadedImagesObserver: TypedObserver<LoadedImages> = new TypedObserver();
-	public loadImages(images:LoadedImages) {
+	public loadImages(images: LoadedImages) {
 		this.images = images;
 		this.setLoadedImagesObserver.emit(images);
 	}
 
 	public setOptionsObserver: TypedObserver<PackOptions> = new TypedObserver();
-	public setOptions(options:PackOptions) {
+	public setOptions(options: PackOptions) {
 		this.options = options;
 		this.setOptionsObserver.emit(options);
 	}
 
-	public setOnComplete(onComplete:(res:unknown) => void) {
+	public setOnComplete(onComplete: (res: unknown) => void) {
 		this.onComplete = onComplete;
 	}
 
-	public setOnError(onError:(err:string) => void) {
+	public setOnError(onError: (err: string) => void) {
 		this.onError = onError;
 	}
 
@@ -71,10 +71,10 @@ export default class FunkinPackerApi {
 	private _packProcessor: PackProcessor;
 
 	public pack() {
-		if(!this._packProcessor) {
+		if (!this._packProcessor) {
 			this._packProcessor = new PackProcessor(this);
 		}
-		if(!this.images) {
+		if (!this.images) {
 			throw new ApiError(ErrorCodes.NO_IMAGES_ERROR);
 		}
 		return this._packProcessor.pack(this.images, this.options);

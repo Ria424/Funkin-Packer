@@ -6,13 +6,13 @@ class ProcessingOverlay extends React.Component {
 	private readonly overlayRef: React.RefObject<HTMLDivElement> = React.createRef();
 	private showTimer: NodeJS.Timeout | null = null;
 
-	constructor(props:any) {
+	constructor(props: any) {
 		super(props);
 	}
 
 	override componentDidMount = () => {
 		let overlay = this.overlayRef.current;
-		if(overlay) {
+		if (overlay) {
 			overlay.style.visibility = "hidden";
 
 			this.showTimer = setTimeout(() => {
@@ -22,7 +22,7 @@ class ProcessingOverlay extends React.Component {
 	}
 
 	override componentWillUnmount = () => {
-		if(this.showTimer) clearTimeout(this.showTimer);
+		if (this.showTimer) clearTimeout(this.showTimer);
 	}
 
 	override render() {

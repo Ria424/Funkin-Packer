@@ -12,7 +12,7 @@ import type { LoadedImages, PackOptions, Rect } from 'api/types';
 import ErrorHandler from './ErrorHandler';
 import FunkinPackerApi from 'api/FunkinPackerApi';
 
-let INSTANCE:APP;
+let INSTANCE: APP;
 
 class APP {
 	images: LoadedImages;
@@ -71,10 +71,10 @@ class APP {
 		try {
 			this.api.loadImages(this.images);
 			this.api.setOptions(this.packOptions);
-			const {result, usedPacker} = this.api.pack();
+			const { result, usedPacker } = this.api.pack();
 			this.onPackComplete(result, usedPacker);
 		}
-		catch (e:any) {
+		catch (e: any) {
 			this.onPackError({
 				description: ErrorHandler.translateError(e)
 			});
@@ -82,7 +82,7 @@ class APP {
 		}
 	}
 
-	private onPackComplete = (res:Rect[][], usedPacker:PackerCombo) => {
+	private onPackComplete = (res: Rect[][], usedPacker: PackerCombo) => {
 		this.packResult = [];
 
 		for (const data of res) {
@@ -124,7 +124,7 @@ class APP {
 		// eslint-disable-next-line new-cap
 		const filter = new filterClass();
 
-		const files:FileData[] = [];
+		const files: FileData[] = [];
 
 		const textureFormat = this.packOptions.textureFormat ?? "png";
 		//TODO: move to options
@@ -151,7 +151,7 @@ class APP {
 				base64: true
 			});
 
-			const options:RenderSettings = {
+			const options: RenderSettings = {
 				imageName: `${fName}`,
 				imageFile: `${fName}.${textureFormat}`,
 				imageData,

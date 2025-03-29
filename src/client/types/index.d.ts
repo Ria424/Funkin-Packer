@@ -1,7 +1,6 @@
 import type { Rect } from "api/types";
 import TextureRenderer from "client/utils/TextureRenderer";
 
-
 declare type PackResultsData = {
 	data: Rect[];
 	buffer: HTMLCanvasElement;

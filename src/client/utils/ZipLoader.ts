@@ -45,12 +45,12 @@ class ZipLoader {
 		const extensions = ["png", "jpg", "jpeg", "gif"];
 
 		this.filesList = [];
-		for(const name of files) {
+		for (const name of files) {
 			const file = this.zip.files[name] as JSZip.JSZipObject;
 
-			if(!file.dir) {
+			if (!file.dir) {
 				const ext = name.split(".").pop()?.toLowerCase() || "png";
-				if(extensions.indexOf(ext) >= 0 && name.toUpperCase().indexOf("__MACOSX") < 0) {
+				if (extensions.indexOf(ext) >= 0 && name.toUpperCase().indexOf("__MACOSX") < 0) {
 					this.filesList.push(name);
 				}
 			}
@@ -62,20 +62,20 @@ class ZipLoader {
 	}
 
 	private loadNext = () => {
-		if(!this.filesList.length) {
+		if (!this.filesList.length) {
 			this.waitImages();
 			return;
 		}
 
 		const name = this.filesList.shift();
-		if(!name) {
+		if (!name) {
 			this.waitImages();
 			return;
 		}
 
 		this.zip.file(name)?.async("base64").then((d: string) => {
 			const ext = name.split(".").pop()?.toLowerCase() || "png";
-			const content = "data:image/"+ext+";base64," + d;
+			const content = "data:image/" + ext + ";base64," + d;
 
 			const img = new CustomImage(new Image());
 
@@ -85,7 +85,7 @@ class ZipLoader {
 			this.loaded[name] = img;
 			this.loadedCnt++;
 
-			if(this.onProgress) {
+			if (this.onProgress) {
 				this.onProgress(this.loadedCnt / (this.loadedCnt + this.filesList.length));
 			}
 
@@ -96,15 +96,15 @@ class ZipLoader {
 	private waitImages = () => {
 		let ready = true;
 
-		for(const key of Object.keys(this.loaded)) {
-			if(!this.loaded[key]?.complete) {
+		for (const key of Object.keys(this.loaded)) {
+			if (!this.loaded[key]?.complete) {
 				ready = false;
 				break;
 			}
 		}
 
-		if(ready) {
-			if(this.onEnd) this.onEnd(this.loaded);
+		if (ready) {
+			if (this.onEnd) this.onEnd(this.loaded);
 		}
 		else {
 			setTimeout(this.waitImages, 50);

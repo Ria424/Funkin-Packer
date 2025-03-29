@@ -20,7 +20,7 @@ export type RepackInfoEvent = {
 	totalFrames: number;
 }
 
-interface Props {}
+interface Props { }
 
 interface State {
 	info: StatsInfoEvent;
@@ -29,7 +29,7 @@ interface State {
 }
 
 class StatsInfo extends React.Component<Props, State> {
-	constructor(props:Props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -82,12 +82,12 @@ class StatsInfo extends React.Component<Props, State> {
 			let repackInfo = this.state.repackInfo;
 			if (repackInfo) {
 				const oldUsage = (repackInfo.width * repackInfo.height * 4);
-				const savedRamPercent = (ramUsage-oldUsage) / oldUsage;
+				const savedRamPercent = (ramUsage - oldUsage) / oldUsage;
 				let savePercentTxt = (savedRamPercent * 100).toFixed(2);
-				if(savedRamPercent > 0) savePercentTxt = "+" + savePercentTxt;
+				if (savedRamPercent > 0) savePercentTxt = "+" + savePercentTxt;
 				let saveTxt = " (" + savePercentTxt + "%)";
 				const color = savedRamPercent < 0 ? "#00FF00" : "#FF0000";
-				savingText = <span style={{color}}>{saveTxt}</span>;
+				savingText = <span style={{ color }}>{saveTxt}</span>;
 
 				ramTitle = formatBytes(oldUsage, 3, this.state.si) + " -> " + formatBytes(ramUsage, 3, this.state.si);
 			}

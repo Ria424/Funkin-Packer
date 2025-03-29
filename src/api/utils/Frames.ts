@@ -1,13 +1,13 @@
 import type { PackOptions, Rect } from "../types";
 
-export function getSheetSize(data:Rect[], options:PackOptions={}) {
+export function getSheetSize(data: Rect[], options: PackOptions = {}) {
 	let width = options.width || 0;
 	let height = options.height || 0;
 
 	//let padding = options.padding || 0;
 	const borderPadding = options.borderPadding || 0;
 
-	if(!options.fixedSize) {
+	if (!options.fixedSize) {
 		width = 0;
 		height = 0;
 
@@ -15,7 +15,7 @@ export function getSheetSize(data:Rect[], options:PackOptions={}) {
 			let w = item.frame.x;
 			let h = item.frame.y;
 
-			if(item.rotated) {
+			if (item.rotated) {
 				w += item.frame.h;
 				h += item.frame.w;
 			} else {
@@ -42,12 +42,12 @@ export function getSheetSize(data:Rect[], options:PackOptions={}) {
 		let pw = 2 ** sw;
 		let ph = 2 ** sh;
 
-		if(pw < width) pw = 2 ** (sw + 1);
-		if(ph < height) ph = 2 ** (sh + 1);
+		if (pw < width) pw = 2 ** (sw + 1);
+		if (ph < height) ph = 2 ** (sh + 1);
 
 		width = pw;
 		height = ph;
 	}
 
-	return {width, height} as const;
+	return { width, height } as const;
 }

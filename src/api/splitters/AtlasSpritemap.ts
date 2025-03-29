@@ -38,8 +38,8 @@ class AtlasSpritemap extends Splitter {
 			console.log(json && json.ATLAS && Array.isArray(json.ATLAS.SPRITES));
 			cb(json && json.ATLAS && Array.isArray(json.ATLAS.SPRITES));
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}
@@ -50,7 +50,7 @@ class AtlasSpritemap extends Splitter {
 			const res = [];
 			const json = JSON.parse(data) as AtlasSpritemapData;
 
-			for(const spr of json.ATLAS.SPRITES) {
+			for (const spr of json.ATLAS.SPRITES) {
 				const item = spr.SPRITE;
 				console.log(item);
 				const name = Splitter.fixFileName(item.name);
@@ -61,7 +61,7 @@ class AtlasSpritemap extends Splitter {
 
 				const rotated = item.rotated;
 
-				if(rotated) {
+				if (rotated) {
 					// Unsure if i should swap the offsets too?
 					const temp = width;
 					width = height;
@@ -98,8 +98,8 @@ class AtlasSpritemap extends Splitter {
 
 			cb(res);
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}

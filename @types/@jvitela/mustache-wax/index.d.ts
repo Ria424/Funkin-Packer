@@ -1,4 +1,4 @@
-declare module '@jvitela/mustache-wax' {
+declare module "@jvitela/mustache-wax" {
 	export default function wax(mustache: typeof Mustache, formatters?: Record<string, Formatter>): void;
 }
 

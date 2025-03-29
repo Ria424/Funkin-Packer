@@ -1,22 +1,22 @@
-import MaxRectsBinPack from './packers/MaxRectsBin';
-import OptimalPacker from './packers/OptimalPacker';
-import allPackers, { getPackerByType } from './packers';
-import Trimmer from './utils/Trimmer';
-import { ApiError, ErrorCodes } from 'api/Errors';
-import type { LoadedImages, PackOptions, Rect } from 'api/types';
-import type { PackerClass, PackerCombo } from './packers/Packer';
-import { getSheetSize } from './utils/Frames';
-import FunkinPackerApi from './FunkinPackerApi';
+import MaxRectsBinPack from "./packers/MaxRectsBin";
+import OptimalPacker from "./packers/OptimalPacker";
+import allPackers, { getPackerByType } from "./packers";
+import Trimmer from "./utils/Trimmer";
+import { ApiError, ErrorCodes } from "api/Errors";
+import type { LoadedImages, PackOptions, Rect } from "api/types";
+import type { PackerClass, PackerCombo } from "./packers/Packer";
+import { getSheetSize } from "./utils/Frames";
+import FunkinPackerApi from "./FunkinPackerApi";
 
 class PackProcessor {
 	private api: FunkinPackerApi;
 
-	constructor(api:FunkinPackerApi) {
+	constructor(api: FunkinPackerApi) {
 		this.api = api;
 	}
 
 	private detectIdentical(rects: Rect[], didTrim: boolean) {
-		const identical:Rect[] = [];
+		const identical: Rect[] = [];
 
 		const len = rects.length;
 
@@ -41,10 +41,10 @@ class PackProcessor {
 		} as const;
 	}
 
-	private compareImages(rect1:Rect, rect2:Rect, didTrim:boolean) {
-		if(!didTrim) {
-			if(!rect1.image || !rect2.image) return false;
-			if(rect1.image.base64 === rect2.image.base64) {
+	private compareImages(rect1: Rect, rect2: Rect, didTrim: boolean) {
+		if (!didTrim) {
+			if (!rect1.image || !rect2.image) return false;
+			if (rect1.image.base64 === rect2.image.base64) {
 				return true;
 			}
 			return rect1.image.src === rect2.image.src;
@@ -53,39 +53,39 @@ class PackProcessor {
 		const i1 = rect1.trimmedImage;
 		const i2 = rect2.trimmedImage;
 
-		if(!i1 || !i2) return false;
+		if (!i1 || !i2) return false;
 
 		//return i1 === i2;
 
-		if(i1.length !== i2.length) return false;
+		if (i1.length !== i2.length) return false;
 
 		let length = i1.length;
 
-		while(length--) {
-			if(i1[length] !== i2[length]) return false;
+		while (length--) {
+			if (i1[length] !== i2[length]) return false;
 		}
 		return true;
 	}
 
-	private applyIdentical(rects:Rect[], identical:Rect[]) {
-		const clones:Rect[] = [];
-		const removeIdentical:Rect[] = [];
+	private applyIdentical(rects: Rect[], identical: Rect[]) {
+		const clones: Rect[] = [];
+		const removeIdentical: Rect[] = [];
 
 		for (const item of identical) {
 			const ix = rects.indexOf(item.identical);
 			if (ix >= 0) {
 				const rect = rects[ix];
 
-				const clone = { ...rect};
+				const clone = { ...rect };
 
 				clone.name = item.name;
 				clone.image = item.image;
 				clone.originalFile = item.file;
-				clone.frame = { ...item.frame};
+				clone.frame = { ...item.frame };
 				clone.frame.x = rect.frame.x;
 				clone.frame.y = rect.frame.y;
-				clone.sourceSize = { ...item.sourceSize};
-				clone.spriteSourceSize = { ...item.spriteSourceSize};
+				clone.sourceSize = { ...item.sourceSize };
+				clone.spriteSourceSize = { ...item.spriteSourceSize };
 				clone.skipRender = true;
 
 				removeIdentical.push(item);
@@ -105,12 +105,12 @@ class PackProcessor {
 		return rects;
 	}
 
-	pack(images:LoadedImages, options: PackOptions = {}) {
+	pack(images: LoadedImages, options: PackOptions = {}) {
 		//debugger;
-		if(PROFILER)
+		if (PROFILER)
 			console.time("pack");
 		//console.log(images);
-		let rects:Rect[] = [];
+		let rects: Rect[] = [];
 
 		const spritePadding = options.spritePadding || 0;
 		const borderPadding = options.borderPadding || 0;
@@ -124,7 +124,7 @@ class PackProcessor {
 
 		for (const key of names) {
 			const img = images[key];
-			if(!img) continue;
+			if (!img) continue;
 
 			const name = key.split(".")[0];
 
@@ -178,7 +178,7 @@ class PackProcessor {
 		}
 
 		if (width < minWidth || height < minHeight) {
-			if(PROFILER)
+			if (PROFILER)
 				console.timeEnd("pack");
 			throw new ApiError(ErrorCodes.INVALID_SIZE_ERROR, minWidth.toString(10), minHeight.toString(10));
 		}
@@ -187,7 +187,7 @@ class PackProcessor {
 			Trimmer.trim(rects, alphaThreshold);
 		}
 
-		let identical:Rect[] = [];
+		let identical: Rect[] = [];
 
 		if (options.detectIdentical) {
 			const res = this.detectIdentical(rects, options.allowTrim ?? true);
@@ -197,14 +197,14 @@ class PackProcessor {
 		}
 
 		const getAllPackers = () => {
-			const methods:PackerCombo[] = [];
+			const methods: PackerCombo[] = [];
 			for (const packerClass of allPackers) {
 				if (packerClass === OptimalPacker) continue;
 
 				for (const method in packerClass.methods) {
-					if(!Object.hasOwn(packerClass.methods, method)) continue;
+					if (!Object.hasOwn(packerClass.methods, method)) continue;
 
-					if(options.allowRotation && packerClass.needsNonRotation() || !options.allowRotation) {
+					if (options.allowRotation && packerClass.needsNonRotation() || !options.allowRotation) {
 						methods.push({ packerClass, packerMethod: packerClass.methods[method], allowRotation: false } as const);
 					}
 
@@ -216,14 +216,14 @@ class PackProcessor {
 			return methods;
 		};
 
-		const packerClass:PackerClass = getPackerByType(options.packer) || MaxRectsBinPack;
+		const packerClass: PackerClass = getPackerByType(options.packer) || MaxRectsBinPack;
 		const packerMethod = options.packerMethod || MaxRectsBinPack.methods.BestShortSideFit;
-		const packerCombos:PackerCombo[] = (packerClass === OptimalPacker) ? getAllPackers() : [{ packerClass, packerMethod, allowRotation: options.allowRotation } as const];
+		const packerCombos: PackerCombo[] = (packerClass === OptimalPacker) ? getAllPackers() : [{ packerClass, packerMethod, allowRotation: options.allowRotation } as const];
 
-		let optimalRes:Rect[][];
+		let optimalRes: Rect[][];
 		let optimalSheets = Infinity;
 		let optimalEfficiency = 0;
-		let usedPacker:PackerCombo;
+		let usedPacker: PackerCombo;
 
 		let sourceArea = 0;
 		for (let rect of rects) {
@@ -238,9 +238,9 @@ class PackProcessor {
 			const _rects = packerCombos.length > 1 ? rects.map(rect => (
 				{
 					...rect,
-					frame: { ...rect.frame},
-					spriteSourceSize: { ...rect.spriteSourceSize},
-					sourceSize: { ...rect.sourceSize}
+					frame: { ...rect.frame },
+					spriteSourceSize: { ...rect.spriteSourceSize },
+					sourceSize: { ...rect.sourceSize }
 				}
 			)) : rects;
 
@@ -250,10 +250,10 @@ class PackProcessor {
 			const _identical = packerCombos.length > 1 ? identical.map(rect => {
 				for (let rect2 of _rects) {
 					if (rect.identical.image.base64 === rect2.image.base64) {
-						return { ...rect, identical: rect2};
+						return { ...rect, identical: rect2 };
 					}
 				}
-				return {...rect};
+				return { ...rect };
 			}) : identical;
 
 			let lastLoop = -1;
@@ -278,8 +278,8 @@ class PackProcessor {
 				sheetArea += sheetWidth * sheetHeight;
 			}
 
-			if(_rects.length) {
-				if(packerCombos.length > 1) {
+			if (_rects.length) {
+				if (packerCombos.length > 1) {
 					continue;
 				}
 				console.warn("PackProcessor: Not all images were packed. Some images may be missing.");
@@ -298,13 +298,13 @@ class PackProcessor {
 		}
 
 		for (const sheet of optimalRes) {
-			for(const item of sheet) {
+			for (const item of sheet) {
 				item.frame.x += borderPadding;
 				item.frame.y += borderPadding;
 			}
 		}
 
-		if(PROFILER)
+		if (PROFILER)
 			console.timeEnd("pack");
 
 		return {
@@ -313,7 +313,7 @@ class PackProcessor {
 		} as const;
 	}
 
-	private removeRect(rects:Rect[], name:string) {
+	private removeRect(rects: Rect[], name: string) {
 		for (let i = 0; i < rects.length; i++) {
 			if (rects[i].name === name) {
 				rects.splice(i, 1);

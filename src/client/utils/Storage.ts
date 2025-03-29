@@ -1,11 +1,11 @@
 const PREFIX = "t-packer-";
 
 class Storage {
-	static save(key:string, value:unknown) {
+	static save(key: string, value: unknown) {
 		key = PREFIX + key;
 
-		let valueStr:string;
-		if(typeof value === "string") {
+		let valueStr: string;
+		if (typeof value === "string") {
 			valueStr = value;
 		} else {
 			valueStr = JSON.stringify(value);
@@ -14,12 +14,12 @@ class Storage {
 		localStorage.setItem(key, valueStr);
 	}
 
-	static load(key:string, isJson:boolean = true):any {
+	static load(key: string, isJson: boolean = true): any {
 		key = PREFIX + key;
 
 		let value = localStorage.getItem(key);
 
-		if(value && isJson) {
+		if (value && isJson) {
 			try {
 				value = JSON.parse(value);
 			}

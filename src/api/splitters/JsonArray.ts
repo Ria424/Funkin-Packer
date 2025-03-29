@@ -21,8 +21,8 @@ class JsonArray extends Splitter {
 			const json = JSON.parse(data);
 			cb(json && json.frames && Array.isArray(json.frames));
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}
@@ -33,7 +33,7 @@ class JsonArray extends Splitter {
 			const res = [];
 			const json = JSON.parse(data) as JsonArrayFormat;
 
-			for(const item of json.frames) {
+			for (const item of json.frames) {
 				const trimmed = item.trimmed || item.frame.w < item.spriteSourceSize.w || item.frame.h < item.spriteSourceSize.h;
 				res.push({
 					name: Splitter.fixFileName(item.filename),
@@ -66,8 +66,8 @@ class JsonArray extends Splitter {
 
 			cb(res);
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}

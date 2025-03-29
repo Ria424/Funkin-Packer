@@ -17,7 +17,7 @@ class LocalImagesLoader {
 		this.onEnd = null;
 	}
 
-	load = (data: FileList, onProgress:(loaded: number) => void, onEnd:(data: LoadedImages) => void) => {
+	load = (data: FileList, onProgress: (loaded: number) => void, onEnd: (data: LoadedImages) => void) => {
 		this.data = [];
 
 		for (let i = 0; i < data.length; i++) {
@@ -39,7 +39,7 @@ class LocalImagesLoader {
 		let types = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
 		let item = this.data.shift();
 
-		if(!item) {
+		if (!item) {
 			this.loadNext();
 			return;
 		}

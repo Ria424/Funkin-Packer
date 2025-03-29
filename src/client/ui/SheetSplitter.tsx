@@ -91,19 +91,19 @@ class SheetSplitter extends React.Component<Props, State> {
 	}
 
 	handleWheel = (event: WheelEvent) => {
-		if(!event.ctrlKey) return false;
+		if (!event.ctrlKey) return false;
 
 		let value = this.state.scale;
 		if (event.deltaY >= 0) {
 			if (this.state.scale > 0.1) {
 				value = Number((this.state.scale - this.step).toPrecision(2));
-				this.setState({scale: value});
+				this.setState({ scale: value });
 				this.updateTextureScale(value);
 			}
 		} else {
 			if (this.state.scale < 2.0) {
 				value = Number((this.state.scale + this.step).toPrecision(2));
-				this.setState({scale: value});
+				this.setState({ scale: value });
 				this.updateTextureScale(value);
 			}
 		}
@@ -119,7 +119,7 @@ class SheetSplitter extends React.Component<Props, State> {
 	doRepack = () => {
 		Observer.emit(GLOBAL_EVENT.SHOW_PROCESSING);
 
-		if(!this.frames || !this.frames.length) {
+		if (!this.frames || !this.frames.length) {
 			Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 			TypedObserver.showMessage.emit(I18.f('SPLITTER_ERROR_NO_FRAMES'));
 
@@ -133,7 +133,7 @@ class SheetSplitter extends React.Component<Props, State> {
 
 		const disableUntrim = this.disableUntrimRef.current.checked;
 
-		if(this.state.updateFileName) {
+		if (this.state.updateFileName) {
 			// TODO: clean this up
 			let filename = this.fileName;
 			const di = filename.lastIndexOf(".");
@@ -148,7 +148,7 @@ class SheetSplitter extends React.Component<Props, State> {
 		fixManualOffsets(this.frames);
 		setMaxSizesForSourceSize(this.frames);
 
-		for(const item of this.frames) {
+		for (const item of this.frames) {
 			const trimmed = item.trimmed ? disableUntrim : false;
 
 			//let prefix = cleanPrefix(item.originalFile || item.file || item.name);
@@ -161,7 +161,7 @@ class SheetSplitter extends React.Component<Props, State> {
 
 			const isEmpty = width === 0 || height === 0;
 
-			if(isEmpty) {
+			if (isEmpty) {
 				width = 1;
 				height = 1;
 			}
@@ -171,16 +171,16 @@ class SheetSplitter extends React.Component<Props, State> {
 
 			ctx.clearRect(0, 0, this.buffer.width, this.buffer.height);
 
-			if(!isEmpty) {
-				if(item.rotated) {
+			if (!isEmpty) {
+				if (item.rotated) {
 					ctx.save();
 
-					ctx.translate(item.spriteSourceSize.x + item.spriteSourceSize.w/2, item.spriteSourceSize.y + item.spriteSourceSize.h/2);
+					ctx.translate(item.spriteSourceSize.x + item.spriteSourceSize.w / 2, item.spriteSourceSize.y + item.spriteSourceSize.h / 2);
 					const splitter = this.getCurrentSplitter();
-					ctx.rotate(splitter.inverseRotation ? Math.PI/2 : -Math.PI/2);
+					ctx.rotate(splitter.inverseRotation ? Math.PI / 2 : -Math.PI / 2);
 
-					let dx = trimmed ? item.spriteSourceSize.y - item.spriteSourceSize.h/2 : -item.spriteSourceSize.h/2;
-					let dy = trimmed ? -(item.spriteSourceSize.x + item.spriteSourceSize.w/2) : -item.spriteSourceSize.w/2;
+					let dx = trimmed ? item.spriteSourceSize.y - item.spriteSourceSize.h / 2 : -item.spriteSourceSize.h / 2;
+					let dy = trimmed ? -(item.spriteSourceSize.x + item.spriteSourceSize.w / 2) : -item.spriteSourceSize.w / 2;
 
 					ctx.drawImage(this.texture.image,
 						item.frame.x, item.frame.y,
@@ -202,7 +202,7 @@ class SheetSplitter extends React.Component<Props, State> {
 			}
 
 			let ext = item.name.split('.').pop().toLowerCase();
-			if(!ext) {
+			if (!ext) {
 				ext = 'png';
 				item.name += '.' + ext;
 			}
@@ -221,7 +221,7 @@ class SheetSplitter extends React.Component<Props, State> {
 		//console.log(ImagesList.i);
 		const images: LoadedImages = {};
 
-		for(const file of files) {
+		for (const file of files) {
 			const image = new CustomImage(new Image());
 			image.src = file.content;
 			image.base64 = file.content;
@@ -250,7 +250,7 @@ class SheetSplitter extends React.Component<Props, State> {
 	doExport = () => {
 		Observer.emit(GLOBAL_EVENT.SHOW_PROCESSING);
 
-		if(!this.frames || !this.frames.length) {
+		if (!this.frames || !this.frames.length) {
 			Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 			TypedObserver.showMessage.emit(I18.f('SPLITTER_ERROR_NO_FRAMES'));
 
@@ -258,20 +258,20 @@ class SheetSplitter extends React.Component<Props, State> {
 		}
 
 		const ctx = this.buffer.getContext('2d');
-		if(!ctx) {
+		if (!ctx) {
 			Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 			TypedObserver.showMessage.emit(I18.f('ERROR_NO_CONTEXT'));
 
 			return;
 		}
-		const files:FileData[] = [];
+		const files: FileData[] = [];
 
 		const disableUntrim = this.disableUntrimRef.current?.checked ?? false;
 
 		setMaxSizesForSourceSize(this.frames);
 		// dont fix offsets if we are exporting to a zip
 
-		for(let item of this.frames) {
+		for (let item of this.frames) {
 			const trimmed = item.trimmed ? disableUntrim : false;
 
 			//let prefix = cleanPrefix(item.originalFile || item.file || item.name);
@@ -284,15 +284,15 @@ class SheetSplitter extends React.Component<Props, State> {
 
 			ctx.clearRect(0, 0, this.buffer.width, this.buffer.height);
 
-			if(item.rotated) {
+			if (item.rotated) {
 				ctx.save();
 
-				ctx.translate(item.spriteSourceSize.x + item.spriteSourceSize.w/2, item.spriteSourceSize.y + item.spriteSourceSize.h/2);
+				ctx.translate(item.spriteSourceSize.x + item.spriteSourceSize.w / 2, item.spriteSourceSize.y + item.spriteSourceSize.h / 2);
 				const splitter = this.getCurrentSplitter();
-				ctx.rotate(splitter.inverseRotation ? Math.PI/2 : -Math.PI/2);
+				ctx.rotate(splitter.inverseRotation ? Math.PI / 2 : -Math.PI / 2);
 
-				let dx = trimmed ? item.spriteSourceSize.y - item.spriteSourceSize.h/2 : -item.spriteSourceSize.h/2;
-				let dy = trimmed ? -(item.spriteSourceSize.x + item.spriteSourceSize.w/2) : -item.spriteSourceSize.w/2;
+				let dx = trimmed ? item.spriteSourceSize.y - item.spriteSourceSize.h / 2 : -item.spriteSourceSize.h / 2;
+				let dy = trimmed ? -(item.spriteSourceSize.x + item.spriteSourceSize.w / 2) : -item.spriteSourceSize.w / 2;
 
 				ctx.drawImage(this.texture.image,
 					item.frame.x, item.frame.y,
@@ -314,7 +314,7 @@ class SheetSplitter extends React.Component<Props, State> {
 			}
 
 			let ext = item.name.split('.').pop().toLowerCase();
-			if(!ext) {
+			if (!ext) {
 				ext = 'png';
 				item.name += '.' + ext;
 			}
@@ -335,14 +335,14 @@ class SheetSplitter extends React.Component<Props, State> {
 	}
 
 	selectTexture = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if(e.target.files.length) {
+		if (e.target.files.length) {
 			Observer.emit(GLOBAL_EVENT.SHOW_PROCESSING);
 
 			const loader = new LocalImagesLoader();
 			loader.load(e.target.files, null, data => {
 				const keys = Object.keys(data);
 
-				if(keys.length === 0) {
+				if (keys.length === 0) {
 					Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 					TypedObserver.showMessage.emit(I18.f('SPLITTER_ERROR_NO_TEXTURE'));
 					return;
@@ -363,7 +363,7 @@ class SheetSplitter extends React.Component<Props, State> {
 	updateTexture = () => {
 		const canvas = this.viewRef.current;
 
-		if(this.texture) {
+		if (this.texture) {
 			canvas.width = this.texture.width;
 			canvas.height = this.texture.height;
 			canvas.style.display = '';
@@ -381,7 +381,7 @@ class SheetSplitter extends React.Component<Props, State> {
 	}
 
 	selectDataFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if(e.target.files.length) {
+		if (e.target.files.length) {
 			const item = e.target.files[0];
 
 			const reader = new FileReader();
@@ -392,7 +392,7 @@ class SheetSplitter extends React.Component<Props, State> {
 				// into SGVsbG8sIFdvcmxkIQ==
 				const splitContent = content.split(',');
 				splitContent.shift();
-				if(splitContent.length == 1)
+				if (splitContent.length == 1)
 					content = atob(splitContent.join(','));
 
 				this.data = content;
@@ -414,8 +414,8 @@ class SheetSplitter extends React.Component<Props, State> {
 	}
 
 	updateFrames = () => {
-		if(!this.texture) return;
-		if(this.data === null) return;
+		if (!this.texture) return;
+		if (this.data === null) return;
 
 		//console.log(this.data);
 
@@ -429,13 +429,13 @@ class SheetSplitter extends React.Component<Props, State> {
 		}, frames => {
 			const cleanData = splitterMaster.cleanData(this.data);
 
-			if(frames) {
+			if (frames) {
 				this.frames = frames;
 
 				const canvas = this.viewRef.current;
 				const ctx = canvas.getContext('2d');
 
-				if(!ctx) {
+				if (!ctx) {
 					Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 					TypedObserver.showMessage.emit(I18.f('ERROR_NO_CONTEXT'));
 
@@ -454,27 +454,27 @@ class SheetSplitter extends React.Component<Props, State> {
 				const MANUAL_OFFSETS_COLOR = "160,32,240";
 				const WEIRD_SIZE_COLOR = "227,164,39";
 
-				for(let item of this.frames) {
+				for (let item of this.frames) {
 					const frame = item.frame;
 					let frameHasManualOffsets = false;
 					let frameHasWeirdSize = false;
 
 					let w = frame.w, h = frame.h;
-					if(item.rotated) {
+					if (item.rotated) {
 						w = frame.h;
 						h = frame.w;
 					}
 
-					if(isSparrow) {
-						if(item.frameSize.x < 0 || item.frameSize.y < 0) {
+					if (isSparrow) {
+						if (item.frameSize.x < 0 || item.frameSize.y < 0) {
 							manualOffsets++;
 							frameHasManualOffsets = true;
 							//console.log('manual offsets', item);
-						} else if(item.spriteSourceSize.w + item.frameSize.x > item.frameSize.w) {
+						} else if (item.spriteSourceSize.w + item.frameSize.x > item.frameSize.w) {
 							weirdSize++;
 							frameHasWeirdSize = true;
 							//console.log('weird size', item, item.spriteSourceSize.w + item.frameSize.x, item.sourceSize.frameWidth);
-						} else if(item.spriteSourceSize.h + item.frameSize.y > item.frameSize.h) {
+						} else if (item.spriteSourceSize.h + item.frameSize.y > item.frameSize.h) {
 							weirdSize++;
 							frameHasWeirdSize = true;
 							//console.log('weird size', item, item.spriteSourceSize.h + item.frameSize.y, item.sourceSize.frameHeight);
@@ -482,9 +482,9 @@ class SheetSplitter extends React.Component<Props, State> {
 					}
 
 					let color = DEFAULT_COLOR;
-					if(frameHasManualOffsets) {
+					if (frameHasManualOffsets) {
 						color = MANUAL_OFFSETS_COLOR;
-					} else if(frameHasWeirdSize) {
+					} else if (frameHasWeirdSize) {
 						color = WEIRD_SIZE_COLOR;
 					}
 
@@ -504,8 +504,8 @@ class SheetSplitter extends React.Component<Props, State> {
 
 				const splitterMessage: React.ReactNode[] = [];
 				const addMessage = (msg: React.ReactNode) => {
-					if(splitterMessage.length > 0) {
-						splitterMessage.push(<br/>);
+					if (splitterMessage.length > 0) {
+						splitterMessage.push(<br />);
 					}
 					splitterMessage.push(msg);
 				};
@@ -513,37 +513,37 @@ class SheetSplitter extends React.Component<Props, State> {
 				const ramUsage = canvas.width * canvas.height * 4;
 				addMessage(<><span>Ram Usage: {formatBytes(ramUsage, 3, si)}</span></>);
 				addMessage(<><span>Total Frames: {totalFrames}</span></>);
-				if(manualOffsets > 0) {
-					addMessage(<><span style={{color: "rgb("+MANUAL_OFFSETS_COLOR+")"}}>Manual offsets detected, for {manualOffsets} frames.</span></>);
+				if (manualOffsets > 0) {
+					addMessage(<><span style={{ color: "rgb(" + MANUAL_OFFSETS_COLOR + ")" }}>Manual offsets detected, for {manualOffsets} frames.</span></>);
 				}
-				if(weirdSize > 0) {
-					addMessage(<><span style={{color: "rgb("+WEIRD_SIZE_COLOR+")"}}>Unexpected Frame size detected, possible manual offsets for {weirdSize} frames.</span></>);
+				if (weirdSize > 0) {
+					addMessage(<><span style={{ color: "rgb(" + WEIRD_SIZE_COLOR + ")" }}>Unexpected Frame size detected, possible manual offsets for {weirdSize} frames.</span></>);
 				}
 
 				const splitterName = splitterMaster.currentSplitter.splitterName;
-				if(splitterName === "JSON (hash)" || splitterName === "JSON (array)" || splitterName === "Phaser 3") {
-					addMessage(<><span style={{color: "rgb("+WEIRD_SIZE_COLOR+")"}}>Warning: This format might contain durations, which are not supported by Funkin Packer.</span></>);
+				if (splitterName === "JSON (hash)" || splitterName === "JSON (array)" || splitterName === "Phaser 3") {
+					addMessage(<><span style={{ color: "rgb(" + WEIRD_SIZE_COLOR + ")" }}>Warning: This format might contain durations, which are not supported by Funkin Packer.</span></>);
 				}
 
 
-				this.setState({message: <>{splitterMessage.map((a, i) => <span key={"splitter-message-" + i}>{a}</span>)}</>});
+				this.setState({ message: <>{splitterMessage.map((a, i) => <span key={"splitter-message-" + i}>{a}</span>)}</> });
 
 				// packer detection
 				const detectedPackers: string[] = [];
-				if(isSparrow) {
+				if (isSparrow) {
 					const data = cleanData;
 
 					let packers = 0;
 
-					const HAS_CREDIT				= 1;
+					const HAS_CREDIT = 1;
 
-					const ADOBE_ANIMATE				= 1 << ((1 << 1) - 1);
-					const FUNKIN_PACKER				= 1 << ((2 << 1) - 1);
-					const FREE_TEX_PACKER			= 1 << ((3 << 1) - 1);
-					const LESHY_PACKER				= 1 << ((4 << 1) - 1);
-					const CODENWEB_TEXTURE_PACKER	= 1 << ((5 << 1) - 1);
-					const UNCERTAINPROD_PACKER_WEB	= 1 << ((6 << 1) - 1);
-					const UNCERTAINPROD_PACKER_APP	= 1 << ((7 << 1) - 1);
+					const ADOBE_ANIMATE = 1 << ((1 << 1) - 1);
+					const FUNKIN_PACKER = 1 << ((2 << 1) - 1);
+					const FREE_TEX_PACKER = 1 << ((3 << 1) - 1);
+					const LESHY_PACKER = 1 << ((4 << 1) - 1);
+					const CODENWEB_TEXTURE_PACKER = 1 << ((5 << 1) - 1);
+					const UNCERTAINPROD_PACKER_WEB = 1 << ((6 << 1) - 1);
+					const UNCERTAINPROD_PACKER_APP = 1 << ((7 << 1) - 1);
 
 					let header_is_animate = false;
 					let header_is_common = false;
@@ -559,35 +559,35 @@ class SheetSplitter extends React.Component<Props, State> {
 
 					const commonPackers = FUNKIN_PACKER | FREE_TEX_PACKER | CODENWEB_TEXTURE_PACKER;
 
-					if(data.startsWith('<?xml version="1.0" encoding="UTF-8"?>')) {
+					if (data.startsWith('<?xml version="1.0" encoding="UTF-8"?>')) {
 						packers |= commonPackers;
 						header_is_common = true;
-					} else if(data.startsWith('<?xml version="1.0" encoding="utf-8"?>')) {
+					} else if (data.startsWith('<?xml version="1.0" encoding="utf-8"?>')) {
 						packers |= ADOBE_ANIMATE;
 						header_is_animate = true;
-					} else if(data.startsWith("<?xml version='1.0' encoding='utf-8'?>")) {
+					} else if (data.startsWith("<?xml version='1.0' encoding='utf-8'?>")) {
 						packers |= UNCERTAINPROD_PACKER_APP;
-					} else if(/<textureatlas xmlns="http:\/\/www\.w3\.org\/1999\/xhtml" imagepath="[^"]+"/i.test(data)) {
+					} else if (/<textureatlas xmlns="http:\/\/www\.w3\.org\/1999\/xhtml" imagepath="[^"]+"/i.test(data)) {
 						packers |= LESHY_PACKER;
 						header_is_leshy = true;
 					}
 
 					// Credits, might not exist due to manual removal
-					if(data.includes("Created with Funkin Packer")) {
+					if (data.includes("Created with Funkin Packer")) {
 						packers &= ~commonPackers;
 						packers |= setCreditedPacker(FUNKIN_PACKER);
 					}
-					if(data.includes("Created with Free texture packer")) {
+					if (data.includes("Created with Free texture packer")) {
 						packers &= ~commonPackers;
 						packers |= setCreditedPacker(FREE_TEX_PACKER);
 					}
-					if(data.includes("Created with Adobe Animate")) {
+					if (data.includes("Created with Adobe Animate")) {
 						packers |= setCreditedPacker(ADOBE_ANIMATE);
 					}
-					if(data.includes("Created with TexturePacker https")) {
+					if (data.includes("Created with TexturePacker https")) {
 						packers |= setCreditedPacker(CODENWEB_TEXTURE_PACKER);
 					}
-					if(data.includes("Created using the Spritesheet and XML generator")) {
+					if (data.includes("Created using the Spritesheet and XML generator")) {
 						packers |= setCreditedPacker(UNCERTAINPROD_PACKER_WEB);
 						packers &= removePacker(ADOBE_ANIMATE);
 					}
@@ -600,41 +600,41 @@ class SheetSplitter extends React.Component<Props, State> {
 					// TODO: detect out of order attributes => Haxe-based Packer
 					// Make it print version number of packer
 					// TODO: add haxe xml parser
-					if(/ {4}<SubTexture/.test(data)) {
+					if (/ {4}<SubTexture/.test(data)) {
 						packers &= ~commonPackers;
 						packers |= CODENWEB_TEXTURE_PACKER;
-					} else if(/ {2}<SubTexture/.test(data) || /y="[^"]+"  width="[^"]+"/.test(data)) {
+					} else if (/ {2}<SubTexture/.test(data) || /y="[^"]+"  width="[^"]+"/.test(data)) {
 						packers &= ~commonPackers;
 						packers |= FREE_TEX_PACKER;
 					}
 
-					if(hasPacker(FUNKIN_PACKER)) {
+					if (hasPacker(FUNKIN_PACKER)) {
 						detectedPackers.push('Funkin Packer' + (isCredited(FUNKIN_PACKER) ? '' : ' (Uncredited)'));
 					}
-					if(hasPacker(ADOBE_ANIMATE)) {
+					if (hasPacker(ADOBE_ANIMATE)) {
 						detectedPackers.push('Adobe Animate' + (isCredited(ADOBE_ANIMATE) ? '' : ' (Uncredited)'));
 					}
-					if(hasPacker(FREE_TEX_PACKER)) {
+					if (hasPacker(FREE_TEX_PACKER)) {
 						detectedPackers.push('FreeTexturePacker' + (isCredited(FREE_TEX_PACKER) ? '' : ' (Uncredited)'));
 					}
-					if(hasPacker(LESHY_PACKER)) {
+					if (hasPacker(LESHY_PACKER)) {
 						detectedPackers.push('Leshy Packer');
 					}
-					if(hasPacker(CODENWEB_TEXTURE_PACKER)) {
+					if (hasPacker(CODENWEB_TEXTURE_PACKER)) {
 						const credited = isCredited(CODENWEB_TEXTURE_PACKER);
 						let str = 'CodeAndWeb TexturePacker';
-						if(!credited) {
-							if(header_is_animate)
+						if (!credited) {
+							if (header_is_animate)
 								str += ' (Uncredited, Could be Adobe Animate)';
 							else
 								str += ' (Uncredited, prob: 0.45)';
 						}
 						detectedPackers.push(str);
 					}
-					if(hasPacker(UNCERTAINPROD_PACKER_WEB)) {
+					if (hasPacker(UNCERTAINPROD_PACKER_WEB)) {
 						detectedPackers.push('UncertainProd Web Packer' + (isCredited(UNCERTAINPROD_PACKER_WEB) ? '' : ' (Uncredited)'));
 					}
-					if(hasPacker(UNCERTAINPROD_PACKER_APP)) {
+					if (hasPacker(UNCERTAINPROD_PACKER_APP)) {
 						detectedPackers.push('UncertainProd Packer Desktop');
 					}
 
@@ -643,7 +643,7 @@ class SheetSplitter extends React.Component<Props, State> {
 					//}
 				}
 
-				this.setState({detectedPacker: detectedPackers.join(', ')});
+				this.setState({ detectedPacker: detectedPackers.join(', ') });
 			}
 		});
 	}
@@ -663,9 +663,9 @@ class SheetSplitter extends React.Component<Props, State> {
 
 	setBack = (e: React.MouseEvent<HTMLDivElement>) => {
 		const classNames = (e.target as HTMLDivElement).className.split(" ");
-		for(const name of classNames) {
-			if(this.textureBackColors.indexOf(name as TextureBack[number]) >= 0) {
-				this.setState({textureBack: name});
+		for (const name of classNames) {
+			if (this.textureBackColors.indexOf(name as TextureBack[number]) >= 0) {
+				this.setState({ textureBack: name });
 
 				const canvas = this.viewRef.current;
 				canvas.className = name;
@@ -675,8 +675,8 @@ class SheetSplitter extends React.Component<Props, State> {
 		}
 	}
 
-	updateTextureScale = (val=this.state.scale) => {
-		if(this.texture) {
+	updateTextureScale = (val = this.state.scale) => {
+		if (this.texture) {
 			const w = Math.floor(this.texture.width * val);
 			const h = Math.floor(this.texture.height * val);
 
@@ -688,13 +688,13 @@ class SheetSplitter extends React.Component<Props, State> {
 
 	changeScale = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = Number(e.target.value);
-		this.setState({scale: val});
+		this.setState({ scale: val });
 		this.updateTextureScale(val);
 	}
 
 	onUpdateFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.target.checked;
-		this.setState({updateFileName: val});
+		this.setState({ updateFileName: val });
 		PackProperties.i.packOptions.repackUpdateFileName = val;
 		PackProperties.i.saveOptions();
 		TypedObserver.packExporterChanged.emit(PackProperties.i.getPackOptions());
@@ -751,7 +751,7 @@ class SheetSplitter extends React.Component<Props, State> {
 					</div>
 
 					<div ref={this.wheelRef} className="sheet-splitter-view">
-						<canvas ref={this.viewRef}/>
+						<canvas ref={this.viewRef} />
 					</div>
 
 					<div className="sheet-splitter-controls">
@@ -770,31 +770,31 @@ class SheetSplitter extends React.Component<Props, State> {
 								<tr>
 									<td>{I18.f('UPDATE_FILENAME')}</td>
 									<td>
-										<input ref={this.updateFileNameRef} type="checkbox" className="border-color-gray" defaultChecked={this.state.updateFileName} onChange={this.onUpdateFileNameChange}/>
+										<input ref={this.updateFileNameRef} type="checkbox" className="border-color-gray" defaultChecked={this.state.updateFileName} onChange={this.onUpdateFileNameChange} />
 									</td>
 								</tr>
 								<tr>
 									<td>{I18.f('DISABLE_UNTRIM')}</td>
 									<td>
-										<input ref={this.disableUntrimRef} type="checkbox" className="border-color-gray"/>
+										<input ref={this.disableUntrimRef} type="checkbox" className="border-color-gray" />
 									</td>
 								</tr>
-								<tr style={{display: displayGridProperties}}>
+								<tr style={{ display: displayGridProperties }}>
 									<td>{I18.f('WIDTH')}</td>
 									<td>
-										<input type="number" ref={this.widthRef} defaultValue='64' onChange={this.updateView}/>
+										<input type="number" ref={this.widthRef} defaultValue='64' onChange={this.updateView} />
 									</td>
 								</tr>
-								<tr style={{display: displayGridProperties}}>
+								<tr style={{ display: displayGridProperties }}>
 									<td>{I18.f('HEIGHT')}</td>
 									<td>
-										<input type="number" ref={this.heightRef} defaultValue='64' onChange={this.updateView}/>
+										<input type="number" ref={this.heightRef} defaultValue='64' onChange={this.updateView} />
 									</td>
 								</tr>
-								<tr style={{display: displayGridProperties}}>
+								<tr style={{ display: displayGridProperties }}>
 									<td>{I18.f('PADDING')}</td>
 									<td>
-										<input type="number" ref={this.paddingRef} defaultValue='0' onChange={this.updateView}/>
+										<input type="number" ref={this.paddingRef} defaultValue='0' onChange={this.updateView} />
 									</td>
 								</tr>
 							</tbody>
@@ -847,8 +847,8 @@ class SheetSplitter extends React.Component<Props, State> {
 									<td>
 										{I18.f("SCALE")}
 									</td>
-									<td style={{width: "65%"}}>
-										<input ref={this.rangeRef} style={{width: "100%"}} type="range" min="0.1" max="2" step={this.step} defaultValue="1" onChange={this.changeScale}/>
+									<td style={{ width: "65%" }}>
+										<input ref={this.rangeRef} style={{ width: "100%" }} type="range" min="0.1" max="2" step={this.step} defaultValue="1" onChange={this.changeScale} />
 									</td>
 								</tr>
 							</tbody>

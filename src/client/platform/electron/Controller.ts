@@ -23,7 +23,7 @@ class Controller {
 
 		ipcRenderer.on("project-load", (_e, payload) => {
 			let path = "";
-			if(payload) path = payload.data;
+			if (payload) path = payload.data;
 
 			Project.load(path);
 		});
@@ -96,16 +96,16 @@ class Controller {
 		setTimeout(Project.startObserv, 1000);
 	}
 
-	static updateProject(path="") {
-		ipcRenderer.send('project-update', {path});
+	static updateProject(path = "") {
+		ipcRenderer.send('project-update', { path });
 	}
 
 	static updateProjectModified(val: unknown) {
-		ipcRenderer.send('project-modified', {val});
+		ipcRenderer.send('project-modified', { val });
 	}
 
 	static updateRecentProjects() {
-		ipcRenderer.send('project-recent-update', {projects: Project.getRecentProjects()});
+		ipcRenderer.send('project-recent-update', { projects: Project.getRecentProjects() });
 	}
 
 	static updateLocale() {

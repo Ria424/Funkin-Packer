@@ -24,7 +24,7 @@ class ItemTreePart extends React.Component<TreeListItem> {
 	}
 
 	override render() {
-		if(!this.props || !this.props.items?.length) {
+		if (!this.props || !this.props.items?.length) {
 			return (<span>&nbsp;</span>);
 		}
 
@@ -33,16 +33,16 @@ class ItemTreePart extends React.Component<TreeListItem> {
 				{this.props.items.map((item) => {
 					let key = item.path;
 
-					if(item.isFolder) {
+					if (item.isFolder) {
 						return (
 							<ItemTreeView key={"tree-folder-" + key} {...item}>
-								<ItemTreePart {...item}/>
+								<ItemTreePart {...item} />
 							</ItemTreeView>
 						);
 					}
 
 					return (
-						<ItemTreeItem key={"tree-item-" + key} {...item}/>
+						<ItemTreeItem key={"tree-item-" + key} {...item} />
 					);
 				})}
 			</div>
@@ -51,7 +51,7 @@ class ItemTreePart extends React.Component<TreeListItem> {
 }
 
 class ItemTreeItem extends React.Component<TreeListItem> {
-	constructor(props:TreeListItem) {
+	constructor(props: TreeListItem) {
 		super(props);
 	}
 
@@ -69,7 +69,7 @@ class ItemTreeItem extends React.Component<TreeListItem> {
 	}
 
 	override render() {
-		if(!this.props.img) return (<span>&nbsp;</span>);
+		if (!this.props.img) return (<span>&nbsp;</span>);
 
 		return (
 			<div className={"image-list-item" + (this.props.selected ? " back-400" : "") + (this.props.current ? " image-list-item-current" : "")} onClick={this.onSelect} >
@@ -99,7 +99,7 @@ class ItemTreeView extends React.Component<PropsWithChildren<TreeListItem>, Tree
 	}
 
 	handleCollapse = (e: React.MouseEvent<HTMLDivElement>) => {
-		this.setState({collapsed: !this.state.collapsed});
+		this.setState({ collapsed: !this.state.collapsed });
 
 		e.preventDefault();
 		e.stopPropagation();
@@ -131,7 +131,7 @@ class ItemTreeView extends React.Component<PropsWithChildren<TreeListItem>, Tree
 			containerClass += ' tree-view-children-collapsed';
 		}
 
-		const arrow = (<div className={arrowClass} onClick={this.handleCollapse}/>);
+		const arrow = (<div className={arrowClass} onClick={this.handleCollapse} />);
 		const folderIcon = (<div className="tree-view-folder"></div>);
 
 		return (

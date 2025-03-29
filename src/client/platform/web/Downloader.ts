@@ -3,7 +3,6 @@ import * as FileSaver from 'file-saver';
 import type { FileData } from 'types';
 
 class Downloader {
-
 	static run(files: FileData[], fileName: string, _savePath: string) {
 
 		let zip = new JSZip();
@@ -14,18 +13,17 @@ class Downloader {
 		// replace the default date with dateWithOffset
 		JSZip.defaults.date = dateWithOffset;
 
-		for(let file of files) {
-			zip.file(file.name, file.content, {base64: !!file.base64});
+		for (let file of files) {
+			zip.file(file.name, file.content, { base64: !!file.base64 });
 		}
 
 		let ext = fileName.split(".").pop();
-		if(ext !== "zip") fileName += ".zip";
+		if (ext !== "zip") fileName += ".zip";
 
-		zip.generateAsync({type:"blob"}).then((content) => {
+		zip.generateAsync({ type: "blob" }).then((content) => {
 			FileSaver.saveAs(content, fileName);
 		});
 	}
-
 }
 
 export default Downloader;

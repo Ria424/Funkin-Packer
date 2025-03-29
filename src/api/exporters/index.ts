@@ -238,11 +238,11 @@ let list: Exporter[] = [
 	}
 ] as const;
 
-function getExporterByType(type:string | undefined | null): Exporter | null {
-	if(!type) return null;
+function getExporterByType(type: string | undefined | null): Exporter | null {
+	if (!type) return null;
 
-	for(const item of list) {
-		if(item.exporterName === type) {
+	for (const item of list) {
+		if (item.exporterName === type) {
 			return item;
 		}
 	}
@@ -262,20 +262,20 @@ function prepareData(data: Rect[], options: RenderSettings): {
 	opt.scale ||= 1;
 	opt.base64Prefix = options.textureFormat === "png" ? "data:image/png;base64," : "data:image/jpeg;base64,";
 
-	const ret:ExporterRect[] = [];
+	const ret: ExporterRect[] = [];
 
-	for(const item of data) {
+	for (const item of data) {
 		let name = item.originalFile || item.file;
-		if(!name) continue;
+		if (!name) continue;
 		const origName = name;
 
-		if(opt.removeFileExtension) {
+		if (opt.removeFileExtension) {
 			const parts = name.split(".");
-			if(parts.length > 1) parts.pop();
+			if (parts.length > 1) parts.pop();
 			name = parts.join(".");
 		}
 
-		if(!opt.prependFolderName) {
+		if (!opt.prependFolderName) {
 			name = name.split("/").pop();
 		}
 
@@ -284,8 +284,8 @@ function prepareData(data: Rect[], options: RenderSettings): {
 			y: item.frame.y,
 			w: item.frame.w,
 			h: item.frame.h,
-			hw: item.frame.w/2,
-			hh: item.frame.h/2
+			hw: item.frame.w / 2,
+			hh: item.frame.h / 2
 		};
 		const spriteSourceSize = {
 			x: item.spriteSourceSize.x,
@@ -302,7 +302,7 @@ function prepareData(data: Rect[], options: RenderSettings): {
 
 		let trimmed = item.trimmed;
 
-		if(item.trimmed && opt.trimMode === 'crop') {
+		if (item.trimmed && opt.trimMode === 'crop') {
 			trimmed = false;
 			spriteSourceSize.x = 0;
 			spriteSourceSize.y = 0;
@@ -343,12 +343,12 @@ function prepareData(data: Rect[], options: RenderSettings): {
 
 	}
 
-	return {rects: ret, config: opt};
+	return { rects: ret, config: opt };
 }
 
-function correctOrder(api:FunkinPackerApi, exporter: Exporter, rects:ExporterRect[], config:RenderSettings) {
+function correctOrder(api: FunkinPackerApi, exporter: Exporter, rects: ExporterRect[], config: RenderSettings) {
 	let storedOrder = api.getStoredOrder();
-	if(!!storedOrder) {
+	if (!!storedOrder) {
 		storedOrder = storedOrder.slice();
 		/* if(config.removeFileExtension) {
 			for(let i = 0; i < storedOrder.length; i++) {
@@ -359,8 +359,8 @@ function correctOrder(api:FunkinPackerApi, exporter: Exporter, rects:ExporterRec
 			}
 		} */
 
-		let oldRects:ExporterRect[] = [...rects];
-		let nameMap:Record<string, ExporterRect> = {};
+		let oldRects: ExporterRect[] = [...rects];
+		let nameMap: Record<string, ExporterRect> = {};
 		for (const v of rects) {
 			nameMap[v.origName] = v;
 		}
@@ -374,12 +374,12 @@ function correctOrder(api:FunkinPackerApi, exporter: Exporter, rects:ExporterRec
 		rects = array.concat(oldRects);
 	}
 
-	return {rects, config};
+	return { rects, config };
 }
 
-function offsetFrames(api:FunkinPackerApi, exporter: Exporter, rects:ExporterRect[], config:RenderSettings) {
+function offsetFrames(api: FunkinPackerApi, exporter: Exporter, rects: ExporterRect[], config: RenderSettings) {
 	//console.log(JSON.parse(JSON.stringify(rects)));
-	for(const rect of rects) {
+	for (const rect of rects) {
 		//const frameAnim = cleanPrefix(rect.name);
 
 		let frameX = rect.spriteSourceSize.x;
@@ -396,7 +396,7 @@ function offsetFrames(api:FunkinPackerApi, exporter: Exporter, rects:ExporterRec
 
 	const maxSizes = getMaxSizesForSourceSize(rects);
 
-	for(const rect of rects) {
+	for (const rect of rects) {
 		const frameAnim = cleanPrefix(rect.name);
 
 		rect.sourceSize.w = Math.max(rect.sourceSize.w, maxSizes[frameAnim].mw);
@@ -405,12 +405,12 @@ function offsetFrames(api:FunkinPackerApi, exporter: Exporter, rects:ExporterRec
 
 	//console.log(JSON.parse(JSON.stringify(rects)));
 
-	return {rects, config};
+	return { rects, config };
 }
 
-function startExporter(api:FunkinPackerApi, exporter: Exporter, data: Rect[], options: RenderSettings): Promise<string> {
+function startExporter(api: FunkinPackerApi, exporter: Exporter, data: Rect[], options: RenderSettings): Promise<string> {
 	return new Promise((resolve, reject) => {
-		let {rects, config} = prepareData(data, options);
+		let { rects, config } = prepareData(data, options);
 		const renderOptions = {
 			rects,
 			config,
@@ -418,7 +418,7 @@ function startExporter(api:FunkinPackerApi, exporter: Exporter, data: Rect[], op
 		};
 
 		// Sort the exported rows
-		if(config.sortExportedRows) {
+		if (config.sortExportedRows) {
 			rects = rects.sort((a, b) => smartSortImages(a.name, b.name));
 		}
 
@@ -427,15 +427,15 @@ function startExporter(api:FunkinPackerApi, exporter: Exporter, data: Rect[], op
 
 		//console.log(rects.map((v)=>v.name));
 
-		if(rects.length) {
+		if (rects.length) {
 			rects[0].first = true;
-			rects[rects.length-1].last = true;
+			rects[rects.length - 1].last = true;
 		}
 
 		//data = rects;
 		renderOptions.rects = rects;
 
-		if(exporter.content) {
+		if (exporter.content) {
 			finishExporter(exporter, renderOptions, resolve, reject);
 			return;
 		}
@@ -447,5 +447,5 @@ function startExporter(api:FunkinPackerApi, exporter: Exporter, data: Rect[], op
 	});
 }
 
-export {getExporterByType, startExporter};
+export { getExporterByType, startExporter };
 export default list;

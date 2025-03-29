@@ -9,15 +9,15 @@ import Splitter from './Splitter';
 class Spine extends Splitter {
 	override doCheck(data: string, cb: (checked: boolean) => void) {
 		const lines = data.split('\n');
-		if(lines.length < 2) return cb(false);
-		if(lines[0].trim() !== '') return cb(false);
+		if (lines.length < 2) return cb(false);
+		if (lines[0].trim() !== '') return cb(false);
 
-		if(lines[lines.length-1].trim() !== '') return cb(false);
+		if (lines[lines.length - 1].trim() !== '') return cb(false);
 
 		cb(lines[2] && lines[2].trim().indexOf('size:') === 0);
 	}
 
-	private static finalizeItem(item:SplitterRect):Rect {
+	private static finalizeItem(item: SplitterRect): Rect {
 		/*if(item.offset) {
 			item.spriteSourceSize = {
 				x: item.offset.x,
@@ -36,19 +36,19 @@ class Spine extends Splitter {
 	}
 
 	override doSplit(data: string, cb: (res: Rect[] | false) => void) {
-		const res:Rect[] = [];
+		const res: Rect[] = [];
 
 		const lines = data.split('\n');
 
-		let currentItem:SplitterRect = null;
+		let currentItem: SplitterRect = null;
 
-		for(let i=6; i<lines.length; i++) {
+		for (let i = 6; i < lines.length; i++) {
 			let line = lines[i];
 
-			if(!line) continue;
+			if (!line) continue;
 
-			if(line[0].trim()) {
-				if(currentItem) {
+			if (line[0].trim()) {
+				if (currentItem) {
 					res.push(Spine.finalizeItem(currentItem));
 				}
 
@@ -89,7 +89,7 @@ class Spine extends Splitter {
 				const valParts = val.split(',');
 				valParts[0] = valParts[0].trim();
 
-				if(valParts[1]) valParts[1] = valParts[1].trim();
+				if (valParts[1]) valParts[1] = valParts[1].trim();
 
 				switch (name) {
 					case "rotate":
@@ -123,7 +123,7 @@ class Spine extends Splitter {
 			}
 		}
 
-		if(currentItem) {
+		if (currentItem) {
 			res.push(Spine.finalizeItem(currentItem));
 		}
 

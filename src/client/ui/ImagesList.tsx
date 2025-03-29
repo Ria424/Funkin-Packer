@@ -9,7 +9,7 @@ import ItemTreePart, { type TreeListItem } from './ItemTree';
 
 //import * as FileSystem from './platform/FileSystem';
 
-import {fixManualOffsets, getDummyRect, setMaxSizesForSourceSize, smartSortImages} from 'api/utils/common';
+import { fixManualOffsets, getDummyRect, setMaxSizesForSourceSize, smartSortImages } from 'api/utils/common';
 import type { SelectedEvent } from 'types';
 import TypedObserver from 'TypedObserver';
 import CustomImage from '../data/CustomImage';
@@ -19,7 +19,7 @@ import APP from 'client/APP';
 
 // TODO: make this not use CustomImage.selected + CustomImage.current
 
-let INSTANCE:ImagesList;
+let INSTANCE: ImagesList;
 
 interface Props {
 }
@@ -35,7 +35,7 @@ class ImagesList extends React.Component<Props, State> {
 	private readonly addImagesInputRef: React.RefObject<HTMLInputElement> = React.createRef();
 	private readonly addZipInputRef: React.RefObject<HTMLInputElement> = React.createRef();
 
-	override state:State = {
+	override state: State = {
 		images: {},
 	};
 
@@ -44,7 +44,7 @@ class ImagesList extends React.Component<Props, State> {
 
 		INSTANCE = this;
 
-		this.state = {images: {}};
+		this.state = { images: {} };
 	}
 
 	static get i() {
@@ -59,18 +59,18 @@ class ImagesList extends React.Component<Props, State> {
 		globalThis.addEventListener("keydown", this.handleKeys, false);
 
 		let dropZone = this.imagesTreeRef.current;
-		if(dropZone) {
+		if (dropZone) {
 			dropZone.ondrop = this.onFilesDrop;
 
 			dropZone.addEventListener("dragover", e => {
 				let help = this.dropHelpRef.current;
-				if(help) help.className = "image-drop-help selected";
+				if (help) help.className = "image-drop-help selected";
 				return e.preventDefault();
 			});
 
 			dropZone.addEventListener("dragleave", e => {
 				let help = this.dropHelpRef.current;
-				if(help) help.className = "image-drop-help";
+				if (help) help.className = "image-drop-help";
 				return e.preventDefault();
 			});
 		}
@@ -84,10 +84,10 @@ class ImagesList extends React.Component<Props, State> {
 		globalThis.removeEventListener("keydown", this.handleKeys, false);
 	}
 
-	handleKeys = (e:KeyboardEvent) => {
-		if(e) {
+	handleKeys = (e: KeyboardEvent) => {
+		if (e) {
 			// e.key
-			if((e.code === "KeyA") && e.ctrlKey) {
+			if ((e.code === "KeyA") && e.ctrlKey) {
 				this.selectAllImages();
 				e.preventDefault();
 				return;
@@ -95,7 +95,7 @@ class ImagesList extends React.Component<Props, State> {
 
 			// deprecated backwards compatibility
 			let key = e.keyCode || e.which;
-			if(key === 65 && e.ctrlKey) {
+			if (key === 65 && e.ctrlKey) {
 				this.selectAllImages();
 				e.preventDefault();
 				return;
@@ -104,16 +104,16 @@ class ImagesList extends React.Component<Props, State> {
 	}
 
 	setImages = (images: LoadedImages) => {
-		this.setState({images: images});
+		this.setState({ images: images });
 		TypedObserver.imagesListChanged.emit(images);
 	}
 
 	onFilesDrop = (e: DragEvent) => {
 		e.preventDefault();
 
-		if(!e.dataTransfer) return false;
+		if (!e.dataTransfer) return false;
 
-		if(e.dataTransfer.files.length) {
+		if (e.dataTransfer.files.length) {
 			let loader = new LocalImagesLoader();
 			loader.load(e.dataTransfer.files, null, data => {
 				return this.loadImagesComplete(data);
@@ -123,11 +123,11 @@ class ImagesList extends React.Component<Props, State> {
 		return false;
 	}
 
-	addImages = (e:React.ChangeEvent<HTMLInputElement>) => {
-		if(!e.target) return;
-		if(!e.target.files) return;
+	addImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (!e.target) return;
+		if (!e.target.files) return;
 
-		if(e.target.files.length) {
+		if (e.target.files.length) {
 			Observer.emit(GLOBAL_EVENT.SHOW_PROCESSING);
 
 			let loader = new LocalImagesLoader();
@@ -138,11 +138,11 @@ class ImagesList extends React.Component<Props, State> {
 	}
 
 	addZip = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if(!e.target) return;
-		if(!e.target.files) return;
+		if (!e.target) return;
+		if (!e.target.files) return;
 
 		let file = e.target.files[0];
-		if(file) {
+		if (file) {
 			Observer.emit(GLOBAL_EVENT.SHOW_PROCESSING);
 
 			let loader = new ZipLoader();
@@ -206,26 +206,26 @@ class ImagesList extends React.Component<Props, State> {
 		}
 	}*/
 
-	loadImagesComplete = (data:LoadedImages={}) => {
+	loadImagesComplete = (data: LoadedImages = {}) => {
 
 		Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 
-		if(PLATFORM === "web") {
+		if (PLATFORM === "web") {
 			this.addImagesInputRef.current.value = "";
 			this.addZipInputRef.current.value = "";
 		}
 
 		const names = Object.keys(data);
 
-		if(names.length) {
+		if (names.length) {
 			let images = this.state.images;
 			const rects = [];
 
 			for (const name of names) {
 				images[name] = data[name];
 				const img = images[name];
-				if(!img) continue;
-				if(!img.rect)
+				if (!img) continue;
+				if (!img.rect)
 					img.rect = getDummyRect(name, img.width, img.height);
 				rects.push(img.rect);
 				/*images[name] = {
@@ -243,18 +243,18 @@ class ImagesList extends React.Component<Props, State> {
 
 			images = this.sortImages(images);
 
-			this.setState({images: images});
+			this.setState({ images: images });
 			TypedObserver.imagesListChanged.emit(images);
 		}
 	}
 
-	sortImages = (images:LoadedImages) => {
-		const names:NonNullable<string>[] = Object.keys(images);
+	sortImages = (images: LoadedImages) => {
+		const names: NonNullable<string>[] = Object.keys(images);
 		names.sort(smartSortImages);
 
-		const sorted:LoadedImages = {};
+		const sorted: LoadedImages = {};
 
-		for(let name of names) {
+		for (let name of names) {
 			sorted[name] = images[name];
 		}
 
@@ -263,10 +263,10 @@ class ImagesList extends React.Component<Props, State> {
 
 	clear = () => {
 		const keys = Object.keys(this.state.images);
-		if(keys.length > 0) {
-			const buttons:ButtonData[] = [
-				{name: "yes", caption: I18.f("YES"), callback: this.doClear},
-				{name: "no", caption: I18.f("NO")}
+		if (keys.length > 0) {
+			const buttons: ButtonData[] = [
+				{ name: "yes", caption: I18.f("YES"), callback: this.doClear },
+				{ name: "no", caption: I18.f("NO") }
 			];
 
 			TypedObserver.showMessage.emit(I18.f("CLEAR_WARNING"), buttons);
@@ -277,50 +277,50 @@ class ImagesList extends React.Component<Props, State> {
 		TypedObserver.imagesListChanged.emit({});
 		TypedObserver.imagesListSelectedChanged.emit([]);
 		APP.i.api.reset();
-		this.setState({images: {}});
+		this.setState({ images: {} });
 	}
 
 	selectAllImages = () => {
 		const images = this.state.images;
-		for(const key in images) {
+		for (const key in images) {
 			images[key].selected = true;
 		}
 
-		this.setState({images: this.state.images});
+		this.setState({ images: this.state.images });
 		this.emitSelectedChanges();
 	}
 
 	removeImagesSelect = () => {
 		const images = this.state.images;
-		for(const key in images) {
+		for (const key in images) {
 			images[key].selected = false;
 		}
 	}
 
 	getCurrentImage = () => {
 		const images = this.state.images;
-		for(const key in images) {
-			if(images[key].current) return images[key];
+		for (const key in images) {
+			if (images[key].current) return images[key];
 		}
 
 		return null;
 	}
 
-	getImageIdx = (image:CustomImage) => {
+	getImageIdx = (image: CustomImage) => {
 		let idx = 0;
 
 		const images = this.state.images;
-		for(const key in images) {
-			if(images[key] === image) return idx;
+		for (const key in images) {
+			if (images[key] === image) return idx;
 			idx++;
 		}
 
 		return -1;
 	}
 
-	bulkSelectImages = (to:CustomImage) => {
+	bulkSelectImages = (to: CustomImage) => {
 		const current = this.getCurrentImage();
-		if(!current) {
+		if (!current) {
 			to.selected = true;
 			return;
 		}
@@ -330,9 +330,9 @@ class ImagesList extends React.Component<Props, State> {
 
 		const images = this.state.images;
 		let ix = 0;
-		for(const key in images) {
-			if(fromIx < toIx && ix >= fromIx && ix <= toIx) images[key].selected = true;
-			if(fromIx > toIx && ix <= fromIx && ix >= toIx) images[key].selected = true;
+		for (const key in images) {
+			if (fromIx < toIx && ix >= fromIx && ix <= toIx) images[key].selected = true;
+			if (fromIx > toIx && ix <= fromIx && ix >= toIx) images[key].selected = true;
 			ix++;
 		}
 		this.emitSelectedChanges();
@@ -342,9 +342,9 @@ class ImagesList extends React.Component<Props, State> {
 		const images = this.state.images;
 
 		let first = false;
-		for(const key in images) {
-			if(key.substring(0, path.length + 1) === path + "/") {
-				if(!first) {
+		for (const key in images) {
+			if (key.substring(0, path.length + 1) === path + "/") {
+				if (!first) {
 					first = true;
 					this.clearCurrentImage();
 					images[key].current = true;
@@ -357,7 +357,7 @@ class ImagesList extends React.Component<Props, State> {
 
 	clearCurrentImage = () => {
 		const images = this.state.images;
-		for(const key in images) {
+		for (const key in images) {
 			images[key].current = false;
 		}
 	}
@@ -365,7 +365,7 @@ class ImagesList extends React.Component<Props, State> {
 	getFirstImageInFolder = (path: string) => {
 		const images = this.state.images;
 
-		for(const key in images) {
+		for (const key in images) {
 			if (key.substring(0, path.length + 1) === path + "/")
 				return images[key];
 		}
@@ -377,7 +377,7 @@ class ImagesList extends React.Component<Props, State> {
 		const images = this.state.images;
 
 		let ret = null;
-		for(const key in images) {
+		for (const key in images) {
 			if (key.substring(0, path.length + 1) === path + "/")
 				ret = images[key];
 		}
@@ -389,16 +389,16 @@ class ImagesList extends React.Component<Props, State> {
 		const path = e.path;
 		const images = this.state.images;
 
-		if(e.isFolder) {
-			if(e.ctrlKey) {
+		if (e.isFolder) {
+			if (e.ctrlKey) {
 				this.selectImagesFolder(path, true);
 			}
-			else if(e.shiftKey) {
+			else if (e.shiftKey) {
 				let to = this.getLastImageInFolder(path);
-				if(to) this.bulkSelectImages(to);
+				if (to) this.bulkSelectImages(to);
 
 				to = this.getFirstImageInFolder(path);
-				if(to) {
+				if (to) {
 					this.bulkSelectImages(to);
 					this.clearCurrentImage();
 					to.current = true;
@@ -411,11 +411,11 @@ class ImagesList extends React.Component<Props, State> {
 		}
 		else {
 			const image = images[path];
-			if(image) {
-				if(e.ctrlKey) {
+			if (image) {
+				if (e.ctrlKey) {
 					image.selected = !image.selected;
 				}
-				else if(e.shiftKey) {
+				else if (e.shiftKey) {
 					this.bulkSelectImages(image);
 				}
 				else {
@@ -428,14 +428,14 @@ class ImagesList extends React.Component<Props, State> {
 			}
 		}
 
-		this.setState({images: images});
+		this.setState({ images: images });
 		this.emitSelectedChanges();
 	}
 
 	handleImageClearSelection = () => {
 		this.removeImagesSelect();
 		this.clearCurrentImage();
-		this.setState({images: this.state.images});
+		this.setState({ images: this.state.images });
 		this.emitSelectedChanges();
 	}
 
@@ -444,15 +444,15 @@ class ImagesList extends React.Component<Props, State> {
 
 		const images = this.state.images;
 
-		for(const key in images) {
-			if(images[key].selected) selected.push(key);
+		for (const key in images) {
+			if (images[key].selected) selected.push(key);
 		}
 
 		TypedObserver.imagesListSelectedChanged.emit(selected);
 		//this.imagesTreePartRef.current.setState({selected: selected});
 	}
 
-	createImagesFolder(name="", path=""):TreeListItem {
+	createImagesFolder(name = "", path = ""): TreeListItem {
 		return {
 			img: null,
 			isFolder: true,
@@ -464,12 +464,12 @@ class ImagesList extends React.Component<Props, State> {
 		};
 	}
 
-	getImageSubFolder = (root:TreeListItem, parts:string[]) => {
+	getImageSubFolder = (root: TreeListItem, parts: string[]) => {
 		parts = parts.slice();
 
 		let folder = null;
 
-		while(parts.length) {
+		while (parts.length) {
 			const name = parts.shift();
 
 			folder = null;
@@ -483,7 +483,7 @@ class ImagesList extends React.Component<Props, State> {
 
 			if (!folder) {
 				const p = [];
-				if(root.path) p.unshift(root.path);
+				if (root.path) p.unshift(root.path);
 				p.push(name);
 
 				folder = this.createImagesFolder(name, p.join("/"));
@@ -501,7 +501,7 @@ class ImagesList extends React.Component<Props, State> {
 
 		const keys = Object.keys(this.state.images);
 
-		for(const key of keys) {
+		for (const key of keys) {
 			const parts = key.split("/");
 			const name = parts.pop();
 			const folder = this.getImageSubFolder(res, parts);
@@ -517,7 +517,7 @@ class ImagesList extends React.Component<Props, State> {
 				current: img.current
 			});
 
-			if(this.state.images[key].selected) folder.selected = true;
+			if (this.state.images[key].selected) folder.selected = true;
 		}
 
 		return res;
@@ -529,17 +529,17 @@ class ImagesList extends React.Component<Props, State> {
 		let deletedCount = 0;
 
 		let keys = Object.keys(images);
-		for(let key of keys) {
-			if(images[key].selected) {
+		for (let key of keys) {
+			if (images[key].selected) {
 				deletedCount++;
 				delete images[key];
 			}
 		}
 
-		if(deletedCount > 0) {
+		if (deletedCount > 0) {
 			images = this.sortImages(images);
 
-			this.setState({images: images});
+			this.setState({ images: images });
 			TypedObserver.imagesListChanged.emit(images);
 			this.emitSelectedChanges();
 		}

@@ -1,8 +1,8 @@
 import type { Rect } from "api/types";
 
 const cns = document.createElement("canvas");
-const _ctx = cns.getContext("2d", {willReadFrequently: true});
-if(!_ctx) {
+const _ctx = cns.getContext("2d", { willReadFrequently: true });
+if (!_ctx) {
 	throw new Error("No canvas context");
 }
 const ctx = _ctx;
@@ -56,20 +56,20 @@ class Trimmer {
 		return { left, right, top, bottom };
 	}
 
-	static trim(rects:Rect[], threshold:number=0) {
-		if(rects.length === 0) return;
+	static trim(rects: Rect[], threshold: number = 0) {
+		if (rects.length === 0) return;
 
-		if(PROFILER)
+		if (PROFILER)
 			console.time("trim");
-		for(const item of rects) {
+		for (const item of rects) {
 			const img = item.image;
-			if(!img) continue;
+			if (!img) continue;
 
-			let spaces = {left: 0, right: 0, top: 0, bottom: 0};
+			let spaces = { left: 0, right: 0, top: 0, bottom: 0 };
 
 			const cached = img.cachedTrim !== undefined && img.cachedTrim === threshold;
 
-			if(cached && img.cachedSpaces) {
+			if (cached && img.cachedSpaces) {
 				spaces = img.cachedSpaces;
 			} else {
 				cns.width = img.width;
@@ -87,7 +87,7 @@ class Trimmer {
 
 				console.log("drawn");
 
-				const {data} = ctx.getImageData(0, 0, img.width, img.height);
+				const { data } = ctx.getImageData(0, 0, img.width, img.height);
 
 				console.log("got data");
 
@@ -96,8 +96,8 @@ class Trimmer {
 				console.log("got spacing", spaces);
 			}
 
-			if(spaces.left !== img.width) { // was able to trim it
-				if(spaces.left > 0 || spaces.right > 0 || spaces.top > 0 || spaces.bottom > 0) {
+			if (spaces.left !== img.width) { // was able to trim it
+				if (spaces.left > 0 || spaces.right > 0 || spaces.top > 0 || spaces.bottom > 0) {
 					item.trimmed = true;
 					item.spriteSourceSize.x = spaces.left;
 					item.spriteSourceSize.y = spaces.top;
@@ -122,7 +122,7 @@ class Trimmer {
 				item.spriteSourceSize.h
 			).data;
 
-			if(item.trimmed) {
+			if (item.trimmed) {
 				item.frame.w = item.spriteSourceSize.w;
 				item.frame.h = item.spriteSourceSize.h;
 			}
@@ -131,7 +131,7 @@ class Trimmer {
 			img.cachedSpaces = spaces;
 			img.cachedTrim = threshold;
 		}
-		if(PROFILER)
+		if (PROFILER)
 			console.timeEnd("trim");
 	}
 }

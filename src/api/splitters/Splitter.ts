@@ -20,7 +20,7 @@ class Splitter {
 	}
 
 	cleanData(_data: string) {
-		if(!_data) {
+		if (!_data) {
 			return _data;
 		}
 		// UTF8 BOM
@@ -35,7 +35,7 @@ class Splitter {
 		const validExts = ['png', 'jpg', 'jpeg'];
 		const ext = name.split('.').pop().toLowerCase();
 
-		if(validExts.indexOf(ext) < 0) name += '.png';
+		if (validExts.indexOf(ext) < 0) name += '.png';
 
 		return name;
 	}

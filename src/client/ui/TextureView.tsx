@@ -31,7 +31,7 @@ class TextureView extends React.Component<TextureViewProps> {
 
 	updateView = () => {
 		const view = this.viewRef.current;
-		if(view) {
+		if (view) {
 			view.width = this.props.data.buffer.width;
 			view.height = this.props.data.buffer.height;
 
@@ -39,7 +39,7 @@ class TextureView extends React.Component<TextureViewProps> {
 			view.style.height = Math.floor(view.height * this.props.scale) + "px";
 
 			const ctx = view.getContext("2d");
-			if(!ctx) {
+			if (!ctx) {
 				Observer.emit(GLOBAL_EVENT.HIDE_PROCESSING);
 				TypedObserver.showMessage.emit(I18.f('ERROR_NO_CONTEXT'));
 
@@ -48,15 +48,15 @@ class TextureView extends React.Component<TextureViewProps> {
 
 			ctx.clearRect(0, 0, view.width, view.height);
 
-			if(this.props.selectedImages.length) {
+			if (this.props.selectedImages.length) {
 				ctx.globalAlpha = 0.35;
 			}
 
 			ctx.drawImage(this.props.data.buffer, 0, 0, view.width, view.height, 0, 0, view.width, view.height);
 
-			if(this.props.displayOutline) {
+			if (this.props.displayOutline) {
 				for (const item of this.props.data.data) {
-					if(!item.cloned) {
+					if (!item.cloned) {
 						this.drawOutline(ctx, item);
 					}
 				}
@@ -65,11 +65,11 @@ class TextureView extends React.Component<TextureViewProps> {
 			ctx.globalAlpha = 1;
 
 			for (let item of this.props.data.data) {
-				if(this.props.selectedImages.indexOf(item.file) >= 0 || this.props.selectedImages.indexOf(item.originalFile) >= 0) {
+				if (this.props.selectedImages.indexOf(item.file) >= 0 || this.props.selectedImages.indexOf(item.originalFile) >= 0) {
 					let frame = item.frame;
 
 					let w = frame.w, h = frame.h;
-					if(item.rotated) {
+					if (item.rotated) {
 						w = frame.h;
 						h = frame.w;
 					}
@@ -77,11 +77,11 @@ class TextureView extends React.Component<TextureViewProps> {
 					ctx.clearRect(frame.x, frame.y, w, h);
 					ctx.drawImage(this.props.data.buffer, frame.x, frame.y, w, h, frame.x, frame.y, w, h);
 
-					if(this.props.displayOutline) this.drawOutline(ctx, item);
+					if (this.props.displayOutline) this.drawOutline(ctx, item);
 
 					ctx.beginPath();
 
-					if(ctx.setLineDash) ctx.setLineDash([4, 2]);
+					if (ctx.setLineDash) ctx.setLineDash([4, 2]);
 					ctx.strokeStyle = "#000";
 					ctx.lineWidth = 1;
 					ctx.rect(frame.x, frame.y, w, h);
@@ -98,7 +98,7 @@ class TextureView extends React.Component<TextureViewProps> {
 	drawOutline(ctx: CanvasRenderingContext2D, item: Rect) {
 		let frame = item.frame;
 		let w = frame.w, h = frame.h;
-		if(item.rotated) {
+		if (item.rotated) {
 			w = frame.h;
 			h = frame.w;
 		}
@@ -126,12 +126,12 @@ class TextureView extends React.Component<TextureViewProps> {
 		for (let item of this.props.data.data) {
 			let w = item.frame.w;
 			let h = item.frame.h;
-			if(item.rotated) {
+			if (item.rotated) {
 				w = item.frame.h;
 				h = item.frame.w;
 			}
 
-			if(x >= item.frame.x &&
+			if (x >= item.frame.x &&
 				x < item.frame.x + w &&
 				y >= item.frame.y &&
 				y < item.frame.y + h
@@ -141,7 +141,7 @@ class TextureView extends React.Component<TextureViewProps> {
 			}
 		}
 
-		if(selectedItem) {
+		if (selectedItem) {
 			TypedObserver.imageSelected.emit({
 				isFolder: false,
 				path: selectedItem.file,
@@ -159,7 +159,7 @@ class TextureView extends React.Component<TextureViewProps> {
 
 	selectCloned = (selectedItem: Rect) => {
 		for (let item of this.props.data.data) {
-			if(item.cloned && item.file === selectedItem.file) {
+			if (item.cloned && item.file === selectedItem.file) {
 				TypedObserver.imageSelected.emit({
 					isFolder: false,
 					path: item.originalFile,

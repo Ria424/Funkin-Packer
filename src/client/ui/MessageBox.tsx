@@ -20,29 +20,29 @@ type ButtonProps = ButtonData & {
 
 class MessageBox extends React.Component<Props> {
 	private readonly buttons: ButtonProps[];
-	constructor(props:Props) {
+	constructor(props: Props) {
 		super(props);
 
-		const btns:ButtonProps[] = [];
-		if(this.props.buttons) {
-			for(let btn of this.props.buttons) {
-				btns.push({...btn, parentBox: this});
+		const btns: ButtonProps[] = [];
+		if (this.props.buttons) {
+			for (let btn of this.props.buttons) {
+				btns.push({ ...btn, parentBox: this });
 			}
 		}
-		if(btns.length == 0) {
-			btns.push({name: "ok", caption: I18.f("OK"), parentBox: this});
+		if (btns.length == 0) {
+			btns.push({ name: "ok", caption: I18.f("OK"), parentBox: this });
 		}
 		this.buttons = btns;
 	}
 
 	close = () => {
-		if(this.props.closeCallback) this.props.closeCallback();
+		if (this.props.closeCallback) this.props.closeCallback();
 	}
 
 	override render() {
 		let buttons = [];
 
-		for(let btn of this.buttons) {
+		for (let btn of this.buttons) {
 			buttons.push((<MessageBoxButton key={"btn-" + btn.name} name={btn.name} caption={btn.caption} callback={btn.callback} parentBox={this} />));
 		}
 
@@ -62,13 +62,13 @@ class MessageBox extends React.Component<Props> {
 }
 
 class MessageBoxButton extends React.Component<ButtonProps> {
-	constructor(props:ButtonProps) {
+	constructor(props: ButtonProps) {
 		super(props);
 	}
 
 	onClick = () => {
-		if(this.props.callback) this.props.callback();
-		if(this.props.parentBox) this.props.parentBox.close();
+		if (this.props.callback) this.props.callback();
+		if (this.props.parentBox) this.props.parentBox.close();
 	}
 
 	override render() {

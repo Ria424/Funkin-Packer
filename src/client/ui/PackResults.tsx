@@ -7,7 +7,7 @@ import type { PackResultsData } from 'types';
 import TypedObserver from 'TypedObserver';
 import type { StatsInfoEvent } from './StatsInfo';
 
-interface Props {}
+interface Props { }
 
 const valTextureBackColors = ["grid-back", "white-back", "pink-back", "black-back"] as const;
 type TextureBack = typeof valTextureBackColors;
@@ -52,7 +52,7 @@ class PackResults extends React.Component<Props, State> {
 	}
 
 	onImagesSelected = (data: string[]) => {
-		this.setState({selectedImages: data});
+		this.setState({ selectedImages: data });
 	}
 
 	updatePackResult = (data: StatsInfoEvent) => {
@@ -61,27 +61,27 @@ class PackResults extends React.Component<Props, State> {
 			packResults: data.packResults,
 			usedPacker: data.usedPacker
 		})
-		this.setState({packResult: data.packResults});
+		this.setState({ packResult: data.packResults });
 	}
 
 	setBack = (e: React.MouseEvent<HTMLDivElement>) => {
 		const classNames = (e.target as HTMLDivElement).className.split(" ") as TextureBack[number][];
-		for(const name of classNames) {
-			if(this.textureBackColors.indexOf(name) >= 0) {
-				this.setState({textureBack: name});
+		for (const name of classNames) {
+			if (this.textureBackColors.indexOf(name) >= 0) {
+				this.setState({ textureBack: name });
 				return;
 			}
 		}
 	}
 
 	clearSelection = () => {
-		if(this.state.playerVisible) return;
+		if (this.state.playerVisible) return;
 
 		Observer.emit(GLOBAL_EVENT.IMAGE_CLEAR_SELECTION);
 	}
 
 	handleWheel = (e: WheelEvent) => {
-		if(!e.ctrlKey) return false;
+		if (!e.ctrlKey) return false;
 
 		let value = this.state.scale;
 		if (e.deltaY >= 0) {
@@ -90,12 +90,12 @@ class PackResults extends React.Component<Props, State> {
 				if (value < 0.1) {
 					value = 0.1;
 				}
-				this.setState({scale: value});
+				this.setState({ scale: value });
 			}
 		} else {
 			if (this.state.scale < 2) {
 				value = Number((this.state.scale + this.step).toPrecision(2));
-				this.setState({scale: value});
+				this.setState({ scale: value });
 			}
 		}
 
@@ -108,21 +108,21 @@ class PackResults extends React.Component<Props, State> {
 	}
 
 	changeOutlines = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({displayOutline: e.target.checked});
+		this.setState({ displayOutline: e.target.checked });
 	}
 
 	changeScale = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({scale: Number(e.target.value)});
+		this.setState({ scale: Number(e.target.value) });
 	}
 
 	toggleSpritesPlayer = () => {
-		this.setState({playerVisible: !this.state.playerVisible});
+		this.setState({ playerVisible: !this.state.playerVisible });
 	}
 
 	override render() {
 		const views = [];
-		let ix=0;
-		if(this.state.packResult) {
+		let ix = 0;
+		if (this.state.packResult) {
 			for (const item of this.state.packResult) {
 				views.push((
 					<TextureView key={"tex-view-" + ix} data={item} scale={this.state.scale} textureBack={this.state.textureBack} selectedImages={this.state.selectedImages} displayOutline={this.state.displayOutline} />
@@ -147,7 +147,7 @@ class PackResults extends React.Component<Props, State> {
 
 					<div className="results-view-footer back-white border-color-gray">
 
-						<hr/>
+						<hr />
 
 						<table>
 							<tbody>
@@ -168,15 +168,15 @@ class PackResults extends React.Component<Props, State> {
 									<td>
 										{I18.f("SCALE")}
 									</td>
-									<td style={{width: "50%"}}>
-										<input ref={this.rangeRef} style={{width: "100%"}} type="range" min="0.1" max="4" step={this.step} defaultValue="1" onChange={this.changeScale}/>
+									<td style={{ width: "50%" }}>
+										<input ref={this.rangeRef} style={{ width: "100%" }} type="range" min="0.1" max="4" step={this.step} defaultValue="1" onChange={this.changeScale} />
 									</td>
 									<td>
 										<div className="btn back-800 border-color-gray color-white" onClick={this.toggleSpritesPlayer}>{I18.f("SHOW_SPRITES")}</div>
 									</td>
 								</tr>
-								</tbody>
-							</table>
+							</tbody>
+						</table>
 					</div>
 
 				</div>

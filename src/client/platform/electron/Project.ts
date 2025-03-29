@@ -54,7 +54,7 @@ class Project {
 			}
 		}
 
-		let packOptions = {...APP.i.packOptions};
+		let packOptions = { ...APP.i.packOptions };
 		packOptions.packer = APP.i.packOptions.packerCls.packerName;
 		packOptions.exporter = APP.i.packOptions.exporterCls.exporterName;
 

@@ -7,7 +7,7 @@ class Grid extends Splitter {
 	}
 
 	override doSplit(data: string, cb: (res: Rect[] | false) => void) {
-		const res:Rect[] = [];
+		const res: Rect[] = [];
 
 		const fw = (this.options.width + this.options.padding * 2);
 		const fh = (this.options.height + this.options.padding * 2);
@@ -18,10 +18,10 @@ class Grid extends Splitter {
 		const nc = (cols * rows) + '';
 
 		let ix = 0;
-		for(let y=0; y<rows; y++) {
-			for(let x=0; x<cols; x++) {
+		for (let y = 0; y < rows; y++) {
+			for (let x = 0; x < cols; x++) {
 				let name = ix + '';
-				while(name.length < nc.length) name = '0' + name;
+				while (name.length < nc.length) name = '0' + name;
 
 				res.push({
 					name: Splitter.fixFileName(name),

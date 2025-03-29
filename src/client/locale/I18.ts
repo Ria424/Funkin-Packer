@@ -264,14 +264,14 @@ class I18 {
 				throw new Error('sprintf: (minimum-)width must be finite');
 			}
 
-			let precision:number | null = 0;
+			let precision: number | null = 0;
 
 			if (!prec) precision = 'fFeE'.includes(type) ? 6 : type === 'd' ? 0 : null;
 			else if (prec === '*') precision = +values[i++];
 			else if (prec.charAt(0) === '*') precision = +values[+prec.slice(1, -1)];
 			else precision = +prec;
 
-			if(precision === null) precision = 0;
+			if (precision === null) precision = 0;
 
 			let value = valueIndex ? values[+valueIndex.slice(0, -1) - 1] : values[i++];
 			let number = +value || 0;

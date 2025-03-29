@@ -3,17 +3,28 @@
 		"outDir": "./dist/",
 		"sourceMap": true,
 		"noImplicitAny": true,
-		"lib": ["ESNext", "dom"],
+		"lib": [
+			"ESNext",
+			"dom"
+		],
 		"target": "es2016",
 		"jsx": "react-jsx",
 		"allowJs": true,
 		"moduleResolution": "Node10",
 		"baseUrl": "./src",
 		"paths": {
-			"platform/*": ["client/platform/web/*"],
-			"api/*": ["api/*"],
-			"client/*": ["client/*"],
-			"*": ["client/*"],
+			"platform/*": [
+				"client/platform/web/*"
+			],
+			"api/*": [
+				"api/*"
+			],
+			"client/*": [
+				"client/*"
+			],
+			"*": [
+				"client/*"
+			],
 		},
 		"strict": true,
 		"strictNullChecks": false,
@@ -31,6 +42,6 @@
 		"verbatimModuleSyntax": true,
 	},
 	"exclude": [
-        "node_modules"
-    ]
+		"node_modules"
+	]
 }

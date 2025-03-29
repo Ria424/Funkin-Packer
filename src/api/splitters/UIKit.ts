@@ -7,16 +7,16 @@ class UIKit extends Splitter {
 	override doCheck(data: string, cb: (checked: boolean) => void) {
 		try {
 			const atlas = plistParse(data);
-			if(!atlas) return cb(false);
+			if (!atlas) return cb(false);
 
 			const frames = (atlas as plist.PlistObject).frames as plist.PlistObject;
-			if(!frames) return cb(false);
+			if (!frames) return cb(false);
 
-			if(atlas && frames) {
+			if (atlas && frames) {
 				const names = Object.keys(frames);
 				const frame = frames[names[0]] as plist.PlistObject;
 
-				if(!frame) return cb(false);
+				if (!frame) return cb(false);
 
 				cb(frame.x !== undefined &&
 					frame.y !== undefined &&
@@ -30,8 +30,8 @@ class UIKit extends Splitter {
 
 			cb(false);
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}
@@ -39,14 +39,14 @@ class UIKit extends Splitter {
 
 	override doSplit(data: string, cb: (res: Rect[] | false) => void) {
 		try {
-			const res:Rect[] = [];
+			const res: Rect[] = [];
 
 			const atlas = plistParse(data);
 			const frames = (atlas as plist.PlistObject).frames as plist.PlistObject;
 
 			const names = Object.keys(frames);
 
-			for(const name of names) {
+			for (const name of names) {
 				const item = frames[name] as plist.PlistObject;
 
 				const trimmed = item.w < item.oW || item.h < item.oH;
@@ -82,8 +82,8 @@ class UIKit extends Splitter {
 
 			cb(res);
 		}
-		catch(e) {
-			if(DEBUG)
+		catch (e) {
+			if (DEBUG)
 				console.error(e);
 			cb(false);
 		}
